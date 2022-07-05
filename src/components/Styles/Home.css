@@ -1,0 +1,27 @@
+.Home-container {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+}
+
+.Home-header {
+	padding-top: 5px;
+}
+
+.Home-regular-text {
+	align-self: flex-start;
+	padding: 10px;
+	width: 100%;
+	font-size: 0.65em;
+}
+
+.Home-indented-text {
+	margin-top: 5px;
+	margin-left: 25px;
+}
+
+.Home-section-header {
+	align-self: flex-start;
+}

@@ -1,15 +1,15 @@
 import React from "react";
 import { Form, Input, Button, Message } from "semantic-ui-react";
-import { useEthers } from "@usedapp/core";
+// import { useEthers } from "@usedapp/core";
 
 const Claim = () => {
 	// Destructure properties out of useEthers
-	const { activateBrowserWallet, account, deactivate } = useEthers();
+	// const { activateBrowserWallet, account, deactivate } = useEthers();
 
 	return (
 		<div>
-			<h3>Claim a Prize</h3>
-			{account ? (
+			<h3 style={header}>Claim a Prize</h3>
+			{/* {account ? (
 				<div>
 					<p>Your connected account address: {account}</p>
 					<Button
@@ -27,9 +27,21 @@ const Claim = () => {
 				>
 					Connect your wallet.
 				</Button>
-			)}
+			)} */}
 		</div>
 	);
 };
 
 export default Claim;
+//
+//
+//
+//
+//
+//
+//********** Styles **********//
+const header = {
+	marginTop: 25,
+	marginBottom: 25,
+};
+//****************************//

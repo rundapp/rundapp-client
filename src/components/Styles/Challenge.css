@@ -1,0 +1,41 @@
+.Challenge-container {
+	background-color: #3c414d;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 630px;
+	width: 580px;
+	padding: 10px;
+	border: 1px solid #3c414d;
+	border-radius: 8px;
+}
+
+.Challenge-header {
+	align-self: center;
+	color: #b8b8b8;
+}
+
+.Challenge-label {
+	color: #999999 !important;
+}
+
+.Challenge-input {
+	background-color: #282c34 !important;
+	color: #ffffff !important;
+}
+
+.Challenge-input:focus {
+	border: solid 1px #3ecfff8f !important;
+}
+
+.Challenge-button {
+	width: 100%;
+	background-image: linear-gradient(
+		to right,
+		#1b6882,
+		#15586e,
+		#1f5597,
+		#174379
+	) !important;
+	color: #ffffff !important;
+}

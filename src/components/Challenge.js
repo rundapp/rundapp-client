@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Message } from "semantic-ui-react";
-import { useHistory } from "react-router-dom";
-import { formatEther } from "@ethersproject/units";
+import { Form, Button, Message } from "semantic-ui-react";
+import "./Styles/Challenge.css";
+// import { useHistory } from "react-router-dom";
+// import { formatEther } from "@ethersproject/units";
 
 const Challenge = (props) => {
 	// State Management
@@ -36,12 +37,16 @@ const Challenge = (props) => {
 	};
 
 	return (
-		<div>
-			<h3>Create a Challange</h3>
+		<div className="Challenge-container">
+			<h3 className="Challenge-header">Create a Challange</h3>
 			<Form onSubmit={onSubmit} error={!!errorMessage}>
 				<Form.Field>
-					<label>Your Ethereum account address.</label>
-					<Input
+					<label className="Challenge-label">
+						Your Ethereum account address.
+					</label>
+					<input
+						type="text"
+						className="Challenge-input"
 						value={challengerExtAdress}
 						onChange={(event) =>
 							setChallengerExtAdress(event.target.value)
@@ -49,8 +54,12 @@ const Challenge = (props) => {
 					/>
 				</Form.Field>
 				<Form.Field>
-					<label>Your email address.</label>
-					<Input
+					<label className="Challenge-label">
+						Your email address.
+					</label>
+					<input
+						type="email"
+						className="Challenge-input"
 						value={challengerEmailAdress}
 						onChange={(event) =>
 							setChallengerEmailAdress(event.target.value)
@@ -58,10 +67,12 @@ const Challenge = (props) => {
 					/>
 				</Form.Field>
 				<Form.Field>
-					<label>
+					<label className="Challenge-label">
 						The Ethereum account address of the recipient.
 					</label>
-					<Input
+					<input
+						type="text"
+						className="Challenge-input"
 						value={recipientExtAddress}
 						onChange={(event) =>
 							setRecipienExtAdress(event.target.value)
@@ -69,8 +80,12 @@ const Challenge = (props) => {
 					/>
 				</Form.Field>
 				<Form.Field>
-					<label>The email address of the recipient.</label>
-					<Input
+					<label className="Challenge-label">
+						The email address of the recipient.
+					</label>
+					<input
+						type="email"
+						className="Challenge-input"
 						value={recipientEmailAddress}
 						onChange={(event) =>
 							setRecipienEmailAdress(event.target.value)
@@ -78,39 +93,40 @@ const Challenge = (props) => {
 					/>
 				</Form.Field>
 				<Form.Field>
-					<label>
-						The distance the recipient must run(in decimal format).
+					<label className="Challenge-label">
+						The distance the recipient must run(miles in decimal
+						format).
 					</label>
-					<Input
-						label="Miles"
-						labelPosition="right"
+					<input
+						type="number"
+						className="Challenge-input"
 						value={distance}
 						onChange={(event) => setDistance(event.target.value)}
 					/>
 				</Form.Field>
 				<Form.Field>
-					<label>
-						The pace the recipient must run each mile at (in decimal
-						format).
+					<label className="Challenge-label">
+						The maximum average pace the recipient must run each
+						mile at (mins/mile in decimal format).
 					</label>
-					<Input
-						label="Minutes/Mile"
-						labelPosition="right"
+					<input
+						type="number"
+						className="Challenge-input"
 						value={pace}
 						onChange={(event) => setPace(event.target.value)}
 					/>
 				</Form.Field>
 				<Form.Field>
-					<label>Amount</label>
-					<Input
-						label="ETH"
-						labelPosition="right"
+					<label className="Challenge-label">Amount (in ETH)</label>
+					<input
+						type="number"
+						className="Challenge-input"
 						value={amount}
 						onChange={(event) => setAmount(event.target.value)}
 					/>
 				</Form.Field>
 				<Message error={true} header="Oh no!" content={errorMessage} />
-				<Button secondary={true} loading={loading}>
+				<Button className="Challenge-button" loading={loading}>
 					Challenge
 				</Button>
 			</Form>
