@@ -1,16 +1,30 @@
 // Installed Libraries
 import { useState, useEffect } from "react";
+import { Menu, Button, Icon, Popup } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
-import { Menu, Button, Icon, Dropdown } from "semantic-ui-react";
+import { useSelector, useDispatch } from "react-redux";
 import Web3Modal from "web3modal";
 
 // Local Imports
-import { providerOptions } from "../web3/ProviderOptions";
-import { toHex, truncateAddress } from "../web3/Utils";
-import { networkOptions } from "../web3/NetworkOptions";
+import "../styles/Header.css";
+import { providerOptions } from "../utils/ProviderOptions";
+import {
+	getProviderInfo,
+	getAccount,
+	getChainId,
+	clearAccount,
+	clearChainId,
+	providerError,
+	clearProviderError,
+} from "../redux/actions/ProviderActions";
+import {
+	toHex,
+	truncateAddress,
+	switchToSupportedNetwork,
+} from "../utils/Utils";
+import RunChallenger from "../utils/RunChallenger.json";
 import logo from "../assets/runner-app-logo.png";
-import "./Styles/Header.css";
 
 // Web3Modal Instantiation
 const web3Modal = new Web3Modal({
@@ -22,15 +36,13 @@ const web3Modal = new Web3Modal({
 // Header Function Component
 const Header = () => {
 	// State Management
-	const [provider, setProvider] = useState();
-	const [library, setLibrary] = useState();
-	const [account, setAccount] = useState();
-	const [network, setNetwork] = useState();
-	const [chainId, setChainId] = useState();
-	const [switchToNetwork, setSwitchToNetwork] = useState();
+	const { providerInfo, account, chainId, errorMessage } = useSelector(
+		(state) => state.providerReducer
+	);
+	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState("");
 
+	// Request that user connects wallet through Web3modal
 	const connectWallet = async () => {
 		setIsLoading(true);
 		try {
@@ -38,69 +50,48 @@ const Header = () => {
 			const library = new ethers.providers.Web3Provider(provider);
 			const accounts = await library.listAccounts();
 			const network = await library.getNetwork();
+			const signer = library.getSigner();
 
-			// Store provider and library in state to reuse throughout app
-			setProvider(provider);
-			setLibrary(library);
+			const runChallengerContract = new ethers.Contract(
+				process.env.REACT_APP_POLYGON_MUMBAI_CONTRACT_ADDRESS,
+				RunChallenger.abi,
+				signer
+			);
 
-			// Store user's accounts and current network
-			if (accounts) setAccount(accounts[0]);
-			setChainId(network.chainId);
-			// accounts ?? setAccount(accounts[0]);
-			// setChainId(network.chainId);
+			dispatch(
+				getProviderInfo({
+					provider: provider,
+					library: library,
+					signer: signer,
+					runChallengerContract: runChallengerContract,
+				})
+			);
+
+			if (accounts) {
+				dispatch(getAccount(accounts[0]));
+				if (network.chainId != toHex(80001)) {
+					switchToSupportedNetwork(library, dispatch, providerError);
+					dispatch(getChainId(network.chainId));
+				} else {
+					dispatch(getChainId(network.chainId));
+				}
+			}
 		} catch (err) {
-			setError(err);
+			dispatch(providerError(err));
 			console.log("\n", err);
 		}
 		setIsLoading(false);
 	};
 
-	// If user is not on the network we support, request to change it
-	const switchNetwork = async () => {
-		try {
-			await library.provider.request({
-				method: "wallet_switchEthereumChain",
-				params: [{ chainId: toHex(80001) }], // Polygon Mumbai Testnet
-			});
-		} catch (switchError) {
-			// Code 4902 means the network has not been added to user's Metamask,
-			// so we can request to add it to their wallet
-			if (switchError.code === 4902) {
-				try {
-					await library.provider.request({
-						method: "wallet_addEthereumChain",
-						params: [
-							{
-								chainId: toHex(80001), // Polygon Mumbai Testnet
-								chainName: "Polygon",
-								rpcUrls: ["https://rpc-mumbai.maticvigil.com"],
-								blockExplorerUrls: ["https://polygonscan.com/"],
-							},
-						],
-					});
-				} catch (err) {
-					setError(err);
-					console.log("\n", err);
-				}
-			}
-		}
+	// We cannot disconnect the user, but we can mimic disconnecting by clearingthe state and cache
+	const disconnect = () => {
+		web3Modal.clearCachedProvider();
+		dispatch(clearAccount());
+		dispatch(clearChainId());
 	};
 
-	const refreshState = () => {
-		setAccount();
-		setChainId();
-		setNetwork("");
-	};
-
-	// We cannot disconnect the user because he must do it himself,
-	// but we can mimic disconnecting by clearingthe state and cache
-	const disconnect = async () => {
-		await web3Modal.clearCachedProvider();
-		refreshState();
-	};
-
-	// Automatically connect to cached provider, which is important
-	// in case the user refreshes the page
+	// Automatically connect to cached provider, so the user does not have to click "Connect Wallet"
+	// again after refreshing the page
 	useEffect(() => {
 		if (web3Modal.cachedProvider) {
 			connectWallet();
@@ -110,49 +101,55 @@ const Header = () => {
 	// Listen to and handle changes in account or network data
 	useEffect(() => {
 		// The ?. is the optional chaining operator
-		if (provider?.on) {
+		if (providerInfo.provider?.on) {
 			const handleAccountChanged = (accounts) => {
-				if (accounts) setAccount(accounts[0]);
+				if (accounts) dispatch(getAccount(accounts[0]));
 			};
 			const handleChainChanged = (chainId) => {
-				setChainId(chainId);
+				dispatch(getChainId(chainId));
 			};
 			const handleDisconnect = () => {
 				disconnect();
 			};
-			provider.on("accountChanged", handleAccountChanged);
-			provider.on("chainChanged", handleChainChanged);
-			provider.on("disconnect", handleDisconnect);
+			providerInfo.provider.on("accountChanged", handleAccountChanged);
+			providerInfo.provider.on("chainChanged", handleChainChanged);
+			providerInfo.provider.on("disconnect", handleDisconnect);
 
 			return () => {
-				if (provider.removeListener) {
-					provider.removeListener(
+				if (providerInfo.provider.removeListener) {
+					providerInfo.provider.removeListener(
 						"accountsChanged",
 						handleAccountChanged
 					);
-					provider.removeListener("chainChanged", handleChainChanged);
-					provider.removeListener("disconnect", handleDisconnect);
+					providerInfo.provider.removeListener(
+						"chainChanged",
+						handleChainChanged
+					);
+					providerInfo.provider.removeListener(
+						"disconnect",
+						handleDisconnect
+					);
 				}
 			};
 		}
-	}, [provider]);
+	}, [providerInfo.provider]);
 
 	return (
-		<Menu style={menu}>
-			<Link to="/" className="item" style={link}>
+		<Menu className="Header-menu">
+			<Link to="/" className="item">
 				<img alt="logo" src={logo} />
 			</Link>
 
-			<Link to="/challenge" className="item" style={link}>
+			<Link to="/challenge" className="Header-link item">
 				Challenge
 			</Link>
 
-			<Link to="/claim" className="item" style={link}>
+			<Link to="/claim" className="Header-link item">
 				Claim Bounty
 			</Link>
 			<Menu.Menu position="right">
 				{!account ? (
-					<div style={connectionDiv}>
+					<div className="Header-connection-div">
 						<Button
 							onClick={connectWallet}
 							loading={isLoading}
@@ -161,39 +158,28 @@ const Header = () => {
 							Connect Wallet
 						</Button>
 						<Icon
+							className="Header-connection-icon"
 							color="red"
 							name="dot circle"
-							style={connectionIcon}
 						/>
 					</div>
 				) : (
-					<div style={connectionDiv}>
-						<Dropdown
-							text="Switch Network"
-							value={switchToNetwork}
-							onChange={(e, { value }) => {
-								setSwitchToNetwork(value);
-								console.log("value", value);
-							}}
-							floating
-							button
-							className="link item"
-							style={{
-								backgroundColor: "transparent",
-								color: "white",
-								fontWeight: "bold",
-							}}
-						>
-							<Dropdown.Menu>
-								{networkOptions.map((option) => (
-									<Dropdown.Item
-										key={option.value}
-										{...option}
-									/>
-								))}
-							</Dropdown.Menu>
-						</Dropdown>
-						<p style={accountHex}>{truncateAddress(account)}</p>
+					<div className="Header-connection-div">
+						{chainId != toHex(80001) ? (
+							<Popup
+								content="At present, the only network we support is Polygon Mumbai (ID=80001). Please switch to this network in your wallet."
+								trigger={
+									<p className="Header-unsupported-network">
+										NETWORK NOT SUPPORTED
+									</p>
+								}
+								position="bottom center"
+								inverted
+							/>
+						) : null}
+						<p className="Header-account-hex">
+							{truncateAddress(account)}
+						</p>
 						<Button
 							onClick={disconnect}
 							loading={isLoading}
@@ -202,11 +188,10 @@ const Header = () => {
 							Disconnect
 						</Button>
 						<Icon
+							className="Header-connection-icon"
 							color="green"
 							name="dot circle"
-							style={connectionIcon}
 						/>
-						{switchToNetwork ?? <p>{switchToNetwork}</p>}
 					</div>
 				)}
 			</Menu.Menu>
@@ -214,43 +199,3 @@ const Header = () => {
 	);
 };
 export default Header;
-//
-//
-//
-//
-//
-//
-//********** Styles **********//
-
-const link = {
-	color: "white",
-	fontWeight: "bold",
-};
-
-const menu = {
-	marginTop: 10,
-	height: 15,
-	border: 0,
-	boxShadow: "none",
-	backgroundColor: "transparent",
-};
-
-const connectionDiv = {
-	display: "flex",
-};
-
-const accountHex = {
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "center",
-	height: "100%",
-	marginRight: 11,
-};
-
-const connectionIcon = {
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "center",
-	height: "100%",
-	marginLeft: 5,
-};

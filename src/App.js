@@ -1,14 +1,12 @@
-// Styles
-import "./App.css";
-
 // Installed Libraries
 import { Routes, Route } from "react-router-dom";
 
-// Components
+// Local Imports
+import "./styles/App.css";
 import Layout from "./components/Layout";
-import Home from "./components/Home";
-import Challenge from "./components/Challenge";
-import Claim from "./components/Claim";
+import Home from "./pages/Home";
+import Challenge from "./pages/Challenge";
+import Claim from "./pages/Claim";
 
 const App = () => {
 	return (

@@ -1,0 +1,45 @@
+.App-header {
+	background-color: #282c34;
+	min-height: 100vh;
+	display: grid;
+	font-size: calc(10px + 2vmin);
+	color: white;
+}
+
+.App-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.App-link {
+	color: #61dafb;
+}
+
+/********************************/
+/***** Text Selection Color *****/
+/********************************/
+::selection {
+	background-color: #3ecfff8f !important;
+	color: #ffffff !important;
+}
+
+::-moz-selection {
+	background-color: #3ecfff8f !important;
+	color: #ffffff !important;
+}
+
+::-o-selection {
+	background-color: #3ecfff8f !important;
+	color: #ffffff !important;
+}
+
+::-ms-selection {
+	background-color: #3ecfff8f !important;
+	color: #ffffff !important;
+}
+
+::-webkit-selection {
+	background-color: #3ecfff8f !important;
+	color: #ffffff !important;
+}

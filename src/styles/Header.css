@@ -1,0 +1,41 @@
+.Header-link {
+	color: white !important;
+	font-weight: bold !important;
+}
+
+.Header-menu {
+	margin-top: 10px !important;
+	height: 15px;
+	border: 0px !important;
+	box-shadow: none !important;
+	background-color: transparent !important;
+}
+
+.Header-connection-div {
+	display: flex;
+}
+
+.Header-account-hex {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	margin-right: 11px;
+}
+
+.Header-unsupported-network {
+	color: red;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	margin-right: 11px;
+}
+
+.Header-connection-icon {
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	height: 100% !important;
+	margin-left: 5px !important;
+}

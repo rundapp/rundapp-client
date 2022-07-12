@@ -1,47 +1,102 @@
+// Installed Libraries
 import React from "react";
-import "./Styles/ChallengeCard.css";
+import { Button } from "semantic-ui-react";
+import { useSelector } from "react-redux";
 
-const ChallengeCard = ({ challenge, secsToDate }) => {
+// Local Imports
+import "../styles/ChallengeCard.css";
+
+const ChallengeCard = ({
+	challengerAccount,
+	challengeeAccount,
+	challengeId,
+	bounty,
+	issuedAt,
+	complete,
+	secsToDate,
+	isClaimBounty,
+	onClaim,
+	loading,
+}) => {
+	// Globals State Access
+	const { account, chainId } = useSelector((state) => state.providerReducer);
+
 	return (
 		<div className="ChallengeCard-container">
 			<div className="ChallengeCard-hstack">
 				<p className="ChallengeCard-regular-text">
 					<b className="ChallengeCard-bold-text">Challenger:</b>
-					{challenge.challenger.substring(0, 5)}
+					{challengerAccount.substring(0, 5)}
 					...
-					{challenge.challenger.substring(
-						Math.max(0, challenge.challenger.length - 5)
+					{challengerAccount.substring(
+						Math.max(0, challengerAccount.length - 5)
 					)}
 				</p>
 				<p className="ChallengeCard-regular-text">
 					<b className="ChallengeCard-bold-text">Bounty:</b>
-					{challenge.bounty} ETH
+					{Number(bounty).toFixed(5)} MATIC
 				</p>
 			</div>
 			<div className="ChallengeCard-hstack">
 				<p className="ChallengeCard-regular-text">
 					<b className="ChallengeCard-bold-text">Challengee:</b>
-					{challenge.challengee.substring(0, 5)}
+					{challengeeAccount.substring(0, 5)}
 					...
-					{challenge.challengee.substring(
-						Math.max(0, challenge.challengee.length - 5)
+					{challengeeAccount.substring(
+						Math.max(0, challengeeAccount.length - 5)
 					)}
 				</p>
 				<p className="ChallengeCard-regular-text">
 					<b className="ChallengeCard-bold-text">Issued:</b>
-					{secsToDate(challenge.issuedAt)}
+					{secsToDate(issuedAt)}
 				</p>
 			</div>
-			{challenge.complete ? (
-				<p className="ChallengeCard-complete-text">
-					<b className="ChallengeCard-bold-text">Complete:</b>
-					Yes
-				</p>
+			{complete ? (
+				<div>
+					<div className="ChallengeCard-hstack">
+						<p className="ChallengeCard-complete-text">
+							<b className="ChallengeCard-bold-text">Complete:</b>
+							Yes
+						</p>
+						<p className="ChallengeCard-regular-text">
+							<b className="ChallengeCard-bold-text">ID:</b>
+							{challengeId.substring(0, 5)}
+							...
+							{challengeId.substring(
+								Math.max(0, challengeId.length - 5)
+							)}
+						</p>
+					</div>
+					{isClaimBounty ? (
+						<Button
+							className="ChallengeCard-button"
+							onClick={onClaim}
+							loading={loading}
+							disabled={
+								loading || !account || chainId != 80001
+									? true
+									: false
+							}
+						>
+							Claim Bounty
+						</Button>
+					) : null}
+				</div>
 			) : (
-				<p className="ChallengeCard-incomplete-text">
-					<b className="ChallengeCard-bold-text">Complete:</b>
-					No
-				</p>
+				<div className="ChallengeCard-hstack">
+					<p className="ChallengeCard-incomplete-text">
+						<b className="ChallengeCard-bold-text">Complete:</b>
+						No
+					</p>
+					<p className="ChallengeCard-regular-text">
+						<b className="ChallengeCard-bold-text">ID:</b>
+						{challengeId.substring(0, 5)}
+						...
+						{challengeId.substring(
+							Math.max(0, challengeId.length - 5)
+						)}
+					</p>
+				</div>
 			)}
 		</div>
 	);

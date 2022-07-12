@@ -1,0 +1,70 @@
+.ChallengeCard-container {
+	background-color: #3c414d;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	max-height: 230px;
+	min-height: 185px;
+	max-width: 550px;
+	min-width: 470px;
+	padding: 10px;
+	border: 1px solid #3c414d;
+	border-radius: 8px;
+	margin-top: 5px;
+	margin-bottom: 20px;
+}
+
+.ChallengeCard-regular-text {
+	color: #b8b8b8;
+	align-self: flex-start;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 22px;
+	padding-right: 22px;
+	width: 230px;
+	font-size: 14px;
+}
+
+.ChallengeCard-complete-text {
+	color: #16c174;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 22px;
+	padding-right: 22px;
+	width: 230px;
+	font-size: 14px;
+}
+
+.ChallengeCard-incomplete-text {
+	color: #b5533b;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 22px;
+	padding-right: 22px;
+	width: 230px;
+	font-size: 14px;
+}
+
+.ChallengeCard-bold-text {
+	color: #ffffff;
+	margin-right: 15px;
+}
+
+.ChallengeCard-hstack {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.ChallengeCard-button {
+	width: 100%;
+	background-image: linear-gradient(
+		to right,
+		#1b6882,
+		#15586e,
+		#1f5597,
+		#174379
+	) !important;
+	color: #ffffff !important;
+}

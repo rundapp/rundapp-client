@@ -1,41 +1,34 @@
-import React from "react";
-import "./Styles/Home.css";
-import ChallengeCard from "./ChallengeCard";
+// Installed Libraries
+import React, { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { useSelector } from "react-redux";
+
+// Local Imports
+import "../styles/Home.css";
+import ChallengeCard from "../components/ChallengeCard";
+import { secsToDate } from "../utils/Utils";
 
 const Home = () => {
-	const challengesArray = [
-		{
-			challenger: "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
-			challengee: "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
-			challengeId: "1d3-4g2-523-2w23",
-			bounty: 0.25,
-			issuedAt: 1656676031000,
-			complete: false,
-		},
-		{
-			challenger: "0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2",
-			challengee: "0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db",
-			challengeId: "5m1-32n-5v3-9093",
-			bounty: 0.1,
-			issuedAt: 1656589631000,
-			complete: true,
-		},
-		{
-			challenger: "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4",
-			challengee: "0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB",
-			challengeId: "9m4-lm6-4rt-089a",
-			bounty: 0.005,
-			issuedAt: 1656503231000,
-			complete: false,
-		},
-	];
+	// State Management
+	const { providerInfo, account } = useSelector(
+		(state) => state.providerReducer
+	);
+	const [challengesArray, setChallengesArray] = useState([]);
+	const runChallengerContract = providerInfo.runChallengerContract;
 
-	const secsToDate = (secs) => {
-		var date = new Date(secs).toLocaleString("en-US", {
-			dateStyle: "medium",
-		});
-		return date;
+	const getChallengesArray = async () => {
+		const challenges = await runChallengerContract.getChallenges();
+		setChallengesArray(challenges);
 	};
+
+	useEffect(() => {
+		if (account) getChallengesArray();
+	}, []);
+
+	// On account change => probably not be needed if event listener is working properly in Header.js
+	useEffect(() => {
+		if (account) getChallengesArray();
+	}, [account]);
 
 	return (
 		<div className="Home-container">
@@ -77,11 +70,16 @@ const Home = () => {
 			<h3 className="Home-section-header">
 				Check out some of the latest challenges:
 			</h3>
-			{challengesArray.map((challenge) => (
+			{challengesArray.map((challenge, index) => (
 				<ChallengeCard
-					challenge={challenge}
-					secsToDate={secsToDate}
 					key={challenge.challengeId}
+					challengerAccount={challenge.challenger}
+					challengeeAccount={challenge.challengee}
+					challengeId={challenge.challengeId}
+					bounty={ethers.utils.formatUnits(challenge.bounty, "ether")} // MATIC
+					issuedAt={parseInt(challenge.issuedAt)}
+					complete={challenge.complete}
+					secsToDate={secsToDate}
 				/>
 			))}
 		</div>

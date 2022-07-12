@@ -2,6 +2,8 @@ import optimismLogo from "../assets/optimismLogo.png";
 import polygonLogo from "../assets/polygonLogo.png";
 import ethereumLogo from "../assets/ethereumLogo.png";
 
+// When we want to support multiple networks, these options can be fed
+// to a dropdown for the user to select the desired supported network
 export const networkOptions = [
 	{
 		key: "EthereumRinkebyChainId",
