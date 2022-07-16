@@ -7,12 +7,12 @@ import { useSelector } from "react-redux";
 // Local Imports
 import "../styles/Claim.css";
 import ChallengeCard from "../components/ChallengeCard";
-import blockrunnerAxios from "../api/BlockrunnerAxios";
+import rundappAxios from "../api/RundappAxios";
 import { secsToDate } from "../utils/Utils";
 
 const Claim = () => {
 	// State Management
-	const { providerInfo, account } = useSelector(
+	const { providerInfo, account, chainId } = useSelector(
 		(state) => state.providerReducer
 	);
 	const [verifiedBounties, setVerfiedBounties] = useState([]);
@@ -25,7 +25,7 @@ const Claim = () => {
 
 	const retrieveUnpayedChallenges = async () => {
 		try {
-			const response = await blockrunnerAxios.get(
+			const response = await rundappAxios.get(
 				`/public/challenges/actions/claim?address=${account}`
 			);
 
@@ -68,7 +68,7 @@ const Claim = () => {
 				try {
 					console.log("\nchallengeId: ", challengeId);
 					// send post request to server to update payment complete flag
-					const response = await blockrunnerAxios.patch(
+					const response = await rundappAxios.patch(
 						`/public/challenges/${challengeId}`
 					);
 					console.log("Response Data: ", response.data);
@@ -107,34 +107,54 @@ const Claim = () => {
 	return (
 		<div>
 			<h3 style={header}>Claim Bounty</h3>
-			{verifiedBounties.map((verifiedBounty) => (
-				<ChallengeCard
-					key={verifiedBounty.challenge.id}
-					challengerAccount={
-						verifiedBounty.challenge.challenger_address
-					}
-					challengeeAccount={
-						verifiedBounty.challenge.challengee_address
-					}
-					challengeId={verifiedBounty.challenge.id}
-					bounty={ethers.utils.formatUnits(
-						verifiedBounty.challenge.bounty,
-						"ether"
-					)} //Matic
-					issuedAt={verifiedBounty.challenge.created_at}
-					complete={verifiedBounty.challenge.complete}
-					secsToDate={secsToDate}
-					isClaimBounty={true}
-					onClaim={async () => {
-						onClaim({
-							challengeId: verifiedBounty.challenge.id,
-							hashedMessage: verifiedBounty.hashed_message,
-							signature: verifiedBounty.signature,
-						});
-					}}
-					loading={loading}
-				/>
-			))}
+			{account && chainId == 80001 ? (
+				verifiedBounties.length > 0 ? (
+					verifiedBounties.map((verifiedBounty) => (
+						<ChallengeCard
+							key={verifiedBounty.challenge.id}
+							challengerAccount={
+								verifiedBounty.challenge.challenger_address
+							}
+							challengeeAccount={
+								verifiedBounty.challenge.challengee_address
+							}
+							challengeId={verifiedBounty.challenge.id}
+							bounty={ethers.utils.formatUnits(
+								verifiedBounty.challenge.bounty,
+								"ether"
+							)} //Matic
+							issuedAt={verifiedBounty.challenge.created_at}
+							complete={verifiedBounty.challenge.complete}
+							secsToDate={secsToDate}
+							isClaimBounty={true}
+							onClaim={async () => {
+								onClaim({
+									challengeId: verifiedBounty.challenge.id,
+									hashedMessage:
+										verifiedBounty.hashed_message,
+									signature: verifiedBounty.signature,
+								});
+							}}
+							loading={loading}
+						/>
+					))
+				) : (
+					<div>
+						<span style={{ fontSize: "16px" }}>
+							You have no bounties to claim on completed
+							challenges. If you want to challenge yourself, you
+							can do so here (insert button).
+						</span>
+					</div>
+				)
+			) : (
+				<div>
+					<span style={{ fontSize: "16px" }}>
+						Please make sure your wallet is connected and you are on
+						Polygon Mainnet (ID: 137)
+					</span>
+				</div>
+			)}
 		</div>
 	);
 };

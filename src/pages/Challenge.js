@@ -6,7 +6,14 @@ import { useSelector } from "react-redux";
 
 // Local Imports
 import "../styles/Challenge.css";
-import blockrunnerAxios from "../api/BlockrunnerAxios";
+import rundappAxios from "../api/RundappAxios";
+import {
+	validateEmail,
+	validateAccount,
+	validateDistance,
+	validateSpeed,
+	validateAmount,
+} from "../utils/Utils";
 
 const Challenge = () => {
 	// Global State Management
@@ -27,6 +34,12 @@ const Challenge = () => {
 	const [statusMessage, setStatusMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [progress, setProgress] = useState();
+	const [isChallengerEmailValid, setIsChallengerEmailValid] = useState(false);
+	const [isChallengeeEmailValid, setIsChallengeeEmailValid] = useState(false);
+	const [isAccountValid, setIsAccountValid] = useState(false);
+	const [isDistanceValid, setIsDistanceValid] = useState(false);
+	const [isSpeedValid, setIsSpeedValid] = useState(false);
+	const [isAmounttValid, setIsAmountValid] = useState(false);
 	const runChallengerContract = providerInfo.runChallengerContract;
 	const library = providerInfo.library;
 
@@ -55,8 +68,8 @@ const Challenge = () => {
 			// Attempt to create challenge on chain
 			const txResponse = await runChallengerContract.issueChallenge(
 				challengeeAccount,
-				parseInt(distance),
-				parseInt(speed),
+				parseInt(distance * 1609.344), // Convert miles to meters
+				parseInt(speed * (1609.344 / 60)), // Convert min/mile to meters/sec
 				issuedAt,
 				challengeId,
 				{
@@ -77,7 +90,7 @@ const Challenge = () => {
 			// If transaction completed successfully, send challenge info to server
 			if (txReceipt.status == 1) {
 				try {
-					const response = await blockrunnerAxios.post(
+					const response = await rundappAxios.post(
 						"/public/challenges/actions/create",
 						{
 							challenger_name: challengerName,
@@ -141,29 +154,40 @@ const Challenge = () => {
 							<input
 								className="Challenge-input"
 								id="challengerName"
+								type="text"
+								pattern="/[a-z]/i"
 								value={challengerName}
 								onChange={(event) =>
 									setChallengerName(event.target.value)
 								}
 							/>
 						</Form.Field>
-						<Form.Field>
+						<Form.Field required>
 							<label className="Challenge-label">
-								Your email address.
+								Your email:
 							</label>
 							<input
 								type="email"
 								className="Challenge-input"
 								id="challengerEmail"
-								value={challengerEmail}
+								// value={challengerEmail}
 								onChange={(event) =>
-									setChallengerEmail(event.target.value)
+									validateEmail(
+										event,
+										setChallengerEmail,
+										setChallengeeEmail,
+										setIsChallengerEmailValid,
+										setIsChallengeeEmailValid,
+										{
+											person: "challenger",
+										}
+									)
 								}
 							/>
 						</Form.Field>
 						<Form.Field>
 							<label className="Challenge-label">
-								The name of the person you are challenging:
+								Recipient name:
 							</label>
 							<input
 								className="Challenge-input"
@@ -174,77 +198,103 @@ const Challenge = () => {
 								}
 							/>
 						</Form.Field>
-						<Form.Field>
+
+						<Form.Field required>
 							<label className="Challenge-label">
-								The Ethereum account address of the person you
-								are challenging:
-							</label>
-							<input
-								type="text"
-								className="Challenge-input"
-								id="challengeeAccount"
-								value={challengeeAccount}
-								onChange={(event) =>
-									setChallengeeAccount(event.target.value)
-								}
-							/>
-						</Form.Field>
-						<Form.Field>
-							<label className="Challenge-label">
-								The email address of the person you are
-								challenging:
+								Recipient email:
 							</label>
 							<input
 								type="email"
 								className="Challenge-input"
 								id="challengeeEmail"
-								value={challengeeEmail}
+								// value={challengeeEmail}
 								onChange={(event) =>
-									setChallengeeEmail(event.target.value)
+									validateEmail(
+										event,
+										setChallengerEmail,
+										setChallengeeEmail,
+										setIsChallengerEmailValid,
+										setIsChallengeeEmailValid,
+										{
+											person: "challengee",
+										}
+									)
 								}
 							/>
 						</Form.Field>
-						<Form.Field>
+						<Form.Field required>
 							<label className="Challenge-label">
-								Run distance (miles in decimal format):
+								Recipient public address:
 							</label>
 							<input
-								type="number"
+								type="text"
+								className="Challenge-input"
+								id="challengeeAccount"
+								onChange={(event) =>
+									validateAccount(
+										event,
+										setChallengeeAccount,
+										setIsAccountValid
+									)
+								}
+							/>
+						</Form.Field>
+						<Form.Field required>
+							<label className="Challenge-label">
+								Run distance (miles):
+							</label>
+							<input
 								className="Challenge-input"
 								id="distance"
-								value={distance}
+								type="number"
+								onWheel={(e) => e.target.blur()}
 								onChange={(event) =>
-									setDistance(event.target.value)
+									validateDistance(
+										event,
+										setDistance,
+										setIsDistanceValid
+									)
 								}
+								autoComplete="off"
 							/>
 						</Form.Field>
-						<Form.Field>
+						<Form.Field required>
 							<label className="Challenge-label">
-								The maximum average speed the recipient must run
-								each mile at (mins/mile in decimal format).
+								Average mile pace (mins/mile):
 							</label>
 							<input
-								type="number"
 								className="Challenge-input"
 								id="speed"
+								type="number"
+								onWheel={(e) => e.target.blur()}
 								value={speed}
 								onChange={(event) =>
-									setSpeed(event.target.value)
+									validateSpeed(
+										event,
+										setSpeed,
+										setIsSpeedValid
+									)
 								}
+								autoComplete="off"
 							/>
 						</Form.Field>
-						<Form.Field>
+						<Form.Field required>
 							<label className="Challenge-label">
-								Amount (in MATIC)
+								Amount (MATIC):
 							</label>
 							<input
-								type="number"
 								className="Challenge-input"
 								id="amount"
-								value={amount}
+								type="number"
+								onWheel={(e) => e.target.blur()}
 								onChange={(event) =>
-									setAmount(event.target.value)
+									validateAmount(
+										event,
+										setAmount,
+										setIsAmountValid
+									)
 								}
+								autoComplete="off"
 							/>
 						</Form.Field>
 					</>
@@ -285,7 +335,15 @@ const Challenge = () => {
 						className="Challenge-button"
 						loading={loading}
 						disabled={
-							loading || !account || chainId != 80001
+							!isChallengerEmailValid ||
+							!isAccountValid ||
+							!isChallengeeEmailValid ||
+							!isDistanceValid ||
+							!isSpeedValid ||
+							!isAmounttValid ||
+							loading ||
+							!account ||
+							chainId != 80001
 								? true
 								: false
 						}

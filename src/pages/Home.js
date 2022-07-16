@@ -1,5 +1,6 @@
 // Installed Libraries
 import React, { useEffect, useState } from "react";
+import { Button } from "semantic-ui-react";
 import { ethers } from "ethers";
 import { useSelector } from "react-redux";
 
@@ -31,46 +32,23 @@ const Home = () => {
 	}, [account]);
 
 	return (
-		<div className="Home-container">
-			<h3 className="Home-header">BlockRunner.Quest</h3>
-			<ol className="Home-regular-text">
-				<h3 className="Home-section-header">How it works:</h3>
-				<li className="Home-indented-text">
-					Create a <a href="https://www.strava.com/">Strava </a>
-					account (if you don't have one).
-				</li>
-				<li className="Home-indented-text">
-					Grant BlockRunner.Quest permission to read your Strava data
-					via this{" "}
-					<a href="https://www.strava.com/oauth/authorize?client_id=88040&response_type=code&redirect_uri=http://4f2b-2600-1700-cc20-2d00-29aa-c46c-eecd-8e55.ngrok.io&approval_prompt=force&scope=read_all,activity:read_all">
-						link
-					</a>
-					.
-				</li>
-				<li className="Home-indented-text">
-					Challenge your friends (or yourself) to go on a run by
-					locking up some money that can only be obtained after the
-					run has been completed by the challengee.
-				</li>
-				<li className="Home-indented-text">
-					The challengee must log the run in Strava. The run can be
-					recorded with the{" "}
-					<a href="https://www.strava.com/mobile">
-						Strava mobile app
-					</a>{" "}
-					or uploaded from a fitness wearable (i.e., Apple Watch). The
-					run gets validated almost immediately after it is logged
-					into Strava.
-				</li>
-				<li className="Home-indented-text">
-					The challengee can claim the funds <a href="/claim">here</a>
-					.
-				</li>
-			</ol>
-			<h3 className="Home-section-header">
-				Check out some of the latest challenges:
-			</h3>
-			{challengesArray.map((challenge, index) => (
+		<div className="Home-main-container">
+			<h1 className="Home-header">RunDapp</h1>
+			<div className="Home-top-container">
+				<Button className="Home-top-buttons">Create a Challenge</Button>
+				<Button className="Home-top-buttons">Claim a Bounty</Button>
+				<div className="Home-top-paragraph-container">
+					<p style={{ fontSize: "16px" }}>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+						sed do eiusmod tempor incididunt ut labore et dolore
+						magna aliqua. Consectetur a erat nam at lectus urna duis
+						convallis. Cursus risus at ultrices mi tempus imperdiet
+						nulla malesuada.
+					</p>
+				</div>
+			</div>
+			<h2>Challenge Board</h2>
+			{challengesArray.map((challenge) => (
 				<ChallengeCard
 					key={challenge.challengeId}
 					challengerAccount={challenge.challenger}

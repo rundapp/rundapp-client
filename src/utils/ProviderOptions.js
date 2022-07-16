@@ -24,7 +24,7 @@ export const providerOptions = {
 	coinbasewallet: {
 		package: CoinbaseWalletSDK,
 		options: {
-			appName: "blockrunner.quest",
+			appName: "Rundapp",
 			rpc: {
 				80001: process.env.REACT_APP_POLYGON_MUMBAI_NODE, // Moralis Polygon Mumbai Full Node
 			},

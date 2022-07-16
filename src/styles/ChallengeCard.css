@@ -4,10 +4,10 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	max-height: 230px;
+	/* max-height: 230px;
 	min-height: 185px;
 	max-width: 550px;
-	min-width: 470px;
+	min-width: 470px; */
 	padding: 10px;
 	border: 1px solid #3c414d;
 	border-radius: 8px;

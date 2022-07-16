@@ -10,10 +10,10 @@ import Claim from "./pages/Claim";
 
 const App = () => {
 	return (
-		<div>
+		<div className="App-container">
 			<header className="App-header">
 				<Layout>
-					<div className="App-container ">
+					<div className="App-body ">
 						<Routes>
 							<Route path="/" element={<Home />} />
 							<Route path="/challenge" element={<Challenge />} />

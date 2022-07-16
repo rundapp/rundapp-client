@@ -1,9 +1,34 @@
-.Home-container {
+.Home-main-container {
 	display: flex;
 	flex-direction: column;
 	flex: 1;
 	align-items: center;
 	justify-content: center;
+	/* background-color: #d49292; */
+}
+
+.Home-top-container {
+	display: grid;
+	align-items: center;
+	justify-content: center;
+	/* background-color: #d1ca9d; */
+	width: 100%;
+}
+
+.Home-top-buttons {
+	margin-top: 15px !important;
+	height: 40px;
+}
+
+.Home-top-paragraph-container {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	/* background-color: #a09dd1; */
+	max-height: 230px;
+	min-height: 185px;
+	min-width: 300px;
 }
 
 .Home-header {
@@ -20,8 +45,4 @@
 .Home-indented-text {
 	margin-top: 5px;
 	margin-left: 25px;
-}
-
-.Home-section-header {
-	align-self: flex-start;
 }

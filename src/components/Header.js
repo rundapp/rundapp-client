@@ -24,7 +24,7 @@ import {
 	switchToSupportedNetwork,
 } from "../utils/Utils";
 import RunChallenger from "../utils/RunChallenger.json";
-import logo from "../assets/runner-app-logo.png";
+import logo from "../assets/rundappLogo.png";
 
 // Web3Modal Instantiation
 const web3Modal = new Web3Modal({
@@ -39,6 +39,7 @@ const Header = () => {
 	const { providerInfo, account, chainId, errorMessage } = useSelector(
 		(state) => state.providerReducer
 	);
+	const [windowWidth, setWindowWidth] = useState(0);
 	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -90,12 +91,22 @@ const Header = () => {
 		dispatch(clearChainId());
 	};
 
-	// Automatically connect to cached provider, so the user does not have to click "Connect Wallet"
-	// again after refreshing the page
+	// Update screen dimensions to change layout based on screen size
+	const updateDimensions = () => {
+		const width = window.innerWidth;
+		setWindowWidth(width);
+	};
+
 	useEffect(() => {
+		// Connect to cached provider, to avoid clicking "Connect Wallet after refreshing the page
 		if (web3Modal.cachedProvider) {
 			connectWallet();
 		}
+
+		// Update screen dimensions
+		updateDimensions();
+		window.addEventListener("resize", updateDimensions);
+		return () => window.removeEventListener("resize", updateDimensions);
 	}, []);
 
 	// Listen to and handle changes in account or network data
@@ -139,14 +150,17 @@ const Header = () => {
 			<Link to="/" className="item">
 				<img alt="logo" src={logo} />
 			</Link>
+			{windowWidth >= 625 ? (
+				<>
+					<Link to="/challenge" className="Header-link item">
+						Challenge
+					</Link>
 
-			<Link to="/challenge" className="Header-link item">
-				Challenge
-			</Link>
-
-			<Link to="/claim" className="Header-link item">
-				Claim Bounty
-			</Link>
+					<Link to="/claim" className="Header-link item">
+						Claim Bounty
+					</Link>
+				</>
+			) : null}
 			<Menu.Menu position="right">
 				{!account ? (
 					<div className="Header-connection-div">
@@ -167,7 +181,7 @@ const Header = () => {
 					<div className="Header-connection-div">
 						{chainId != toHex(80001) ? (
 							<Popup
-								content="At present, the only network we support is Polygon Mumbai (ID=80001). Please switch to this network in your wallet."
+								content="At present, the only network we support is Polygon Mainnet (ID=137). Please switch to this network in your wallet."
 								trigger={
 									<p className="Header-unsupported-network">
 										NETWORK NOT SUPPORTED

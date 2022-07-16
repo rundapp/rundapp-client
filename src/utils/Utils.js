@@ -1,3 +1,88 @@
+import validator from "validator";
+
+export const validateEmail = (
+	event,
+	setChallengerEmail,
+	setChallengeeEmail,
+	setIsChallengerEmailValid,
+	setIsChallengeeEmailValid,
+	{ person }
+) => {
+	const email = event.target.value;
+	if (validator.isEmail(email)) {
+		if (person == "challenger") {
+			setChallengerEmail(email);
+			setIsChallengerEmailValid(true);
+		} else if (person == "challengee") {
+			setChallengeeEmail(email);
+			setIsChallengeeEmailValid(true);
+		}
+	} else {
+		if (person == "challenger") {
+			setChallengerEmail(email);
+			setIsChallengerEmailValid(false);
+		} else if (person == "challengee") {
+			setChallengeeEmail(email);
+			setIsChallengeeEmailValid(false);
+		}
+	}
+};
+
+export const validateAccount = (
+	event,
+	setChallengeeAccount,
+	setIsAccountValid
+) => {
+	const account = event.target.value;
+	if (validator.isEthereumAddress(account)) {
+		setChallengeeAccount(account);
+		setIsAccountValid(true);
+	} else {
+		setChallengeeAccount(account);
+		setIsAccountValid(false);
+	}
+};
+
+export const validateDistance = (event, setDistance, setIsDistanceValid) => {
+	const distance = event.target.value;
+	if (distance >= 0.25) {
+		setDistance(distance);
+		setIsDistanceValid(true);
+	} else {
+		setDistance(distance);
+		setIsDistanceValid(false);
+	}
+};
+
+export const validateSpeed = (event, setSpeed, setIsSpeedValid) => {
+	const speed = event.target.value;
+	if (speed >= 3.5 && speed <= 30) {
+		setSpeed(speed);
+		setIsSpeedValid(true);
+	} else {
+		setSpeed(speed);
+		setIsSpeedValid(false);
+	}
+};
+
+export const validateAmount = (event, setAmount, setIsAmountValid) => {
+	const amount = event.target.value;
+	if (amount >= 4) {
+		setAmount(amount);
+		setIsAmountValid(true);
+	} else {
+		setAmount(amount);
+		setIsAmountValid(false);
+	}
+};
+
+export const secsToDate = (time) => {
+	const date = new Date(time).toLocaleString("en-US", {
+		dateStyle: "medium",
+	});
+	return date;
+};
+
 export const truncateAddress = (address) => {
 	if (!address) return "No Account";
 	const match = address.match(
@@ -10,13 +95,6 @@ export const truncateAddress = (address) => {
 export const toHex = (num) => {
 	const val = Number(num);
 	return "0x" + val.toString(16);
-};
-
-export const secsToDate = (time) => {
-	const date = new Date(time).toLocaleString("en-US", {
-		dateStyle: "medium",
-	});
-	return date;
 };
 
 export const switchToSupportedNetwork = async (
