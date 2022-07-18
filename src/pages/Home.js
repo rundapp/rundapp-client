@@ -1,6 +1,7 @@
 // Installed Libraries
 import React, { useEffect, useState } from "react";
 import { Button } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { useSelector } from "react-redux";
 
@@ -8,42 +9,62 @@ import { useSelector } from "react-redux";
 import "../styles/Home.css";
 import ChallengeCard from "../components/ChallengeCard";
 import { secsToDate } from "../utils/Utils";
+import RunChallenger from "../utils/RunChallenger.json";
 
-const Home = () => {
+const Home = ({ windowWidth }) => {
 	// State Management
-	const { providerInfo, account } = useSelector(
-		(state) => state.providerReducer
-	);
 	const [challengesArray, setChallengesArray] = useState([]);
-	const runChallengerContract = providerInfo.runChallengerContract;
 
 	const getChallengesArray = async () => {
+		// Read-only provider
+		const provider = new ethers.providers.JsonRpcProvider(
+			process.env.REACT_APP_POLYGON_MUMBAI_NODE
+		);
+
+		// Read-only contract instance
+		const runChallengerContract = new ethers.Contract(
+			process.env.REACT_APP_POLYGON_MUMBAI_CONTRACT_ADDRESS,
+			RunChallenger.abi,
+			provider
+		);
+
+		// Get challenges from contract
 		const challenges = await runChallengerContract.getChallenges();
-		setChallengesArray(challenges);
+		const reversedChallenges = [...challenges].reverse();
+		setChallengesArray(reversedChallenges);
 	};
 
 	useEffect(() => {
-		if (account) getChallengesArray();
+		getChallengesArray();
 	}, []);
-
-	// On account change => probably not be needed if event listener is working properly in Header.js
-	useEffect(() => {
-		if (account) getChallengesArray();
-	}, [account]);
 
 	return (
 		<div className="Home-main-container">
 			<h1 className="Home-header">RunDapp</h1>
 			<div className="Home-top-container">
-				<Button className="Home-top-buttons">Create a Challenge</Button>
-				<Button className="Home-top-buttons">Claim a Bounty</Button>
+				<div className="Home-button-Container">
+					<Link to="/challenge" className="item">
+						<Button className="Home-top-buttons">
+							Create a Challenge
+						</Button>
+					</Link>
+					<Link to="/claim" className="item">
+						<Button className="Home-top-buttons">
+							Claim a Bounty
+						</Button>
+					</Link>
+				</div>
 				<div className="Home-top-paragraph-container">
-					<p style={{ fontSize: "16px" }}>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-						sed do eiusmod tempor incididunt ut labore et dolore
-						magna aliqua. Consectetur a erat nam at lectus urna duis
-						convallis. Cursus risus at ultrices mi tempus imperdiet
-						nulla malesuada.
+					<p className="Home-regular-text">
+						RunDapp is an open-source, Web3 running platform focused
+						on incentivizing people to run. How? With money.
+						RunDapp's incentive mechanism consists of a person
+						locking up a portion of money in a smart contract, such
+						that it only be retrieved upon completion of a run by
+						the intended recipient, which could be the person who
+						initiated the challenge or someone else. This is the
+						first version of this project, but we plan on making
+						various improvements soon. We'll keep you posted!
 					</p>
 				</div>
 			</div>
@@ -55,9 +76,12 @@ const Home = () => {
 					challengeeAccount={challenge.challengee}
 					challengeId={challenge.challengeId}
 					bounty={ethers.utils.formatUnits(challenge.bounty, "ether")} // MATIC
-					issuedAt={parseInt(challenge.issuedAt)}
+					distance={challenge.distance}
+					speed={challenge.speed}
+					issuedAt={challenge.issuedAt}
 					complete={challenge.complete}
 					secsToDate={secsToDate}
+					windowWidth={windowWidth}
 				/>
 			))}
 		</div>

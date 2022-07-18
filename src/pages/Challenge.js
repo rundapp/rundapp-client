@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 // Local Imports
 import "../styles/Challenge.css";
 import rundappAxios from "../api/RundappAxios";
+import { minOptions, secOptions } from "../utils/PaceOptions";
 import {
 	validateEmail,
 	validateAccount,
@@ -15,7 +16,7 @@ import {
 	validateAmount,
 } from "../utils/Utils";
 
-const Challenge = () => {
+const Challenge = ({ windowWidth }) => {
 	// Global State Management
 	const { providerInfo, account, chainId } = useSelector(
 		(state) => state.providerReducer
@@ -30,6 +31,8 @@ const Challenge = () => {
 	const [amount, setAmount] = useState("");
 	const [distance, setDistance] = useState("");
 	const [speed, setSpeed] = useState("");
+	const [paceMinutes, setPaceMinutes] = useState("");
+	const [paceSeconds, setPaceSeconds] = useState("");
 	const [errorMessage, setErrorMessage] = useState("");
 	const [statusMessage, setStatusMessage] = useState("");
 	const [loading, setLoading] = useState(false);
@@ -68,8 +71,8 @@ const Challenge = () => {
 			// Attempt to create challenge on chain
 			const txResponse = await runChallengerContract.issueChallenge(
 				challengeeAccount,
-				parseInt(distance * 1609.344), // Convert miles to meters
-				parseInt(speed * (1609.344 / 60)), // Convert min/mile to meters/sec
+				parseInt(distance * 160934.4), // Convert miles to cm
+				parseInt(speed * (160934.4 / 60)), // Convert min/mile to cm/sec
 				issuedAt,
 				challengeId,
 				{
@@ -127,6 +130,12 @@ const Challenge = () => {
 		setLoading(false);
 	};
 
+	// Convert pace from min:sec to min in decimal format
+	useEffect(() => {
+		const convertedSpeed = (+paceMinutes + +paceSeconds / 60).toFixed(2);
+		validateSpeed(convertedSpeed, setSpeed, setIsSpeedValid);
+	}, [paceMinutes, paceSeconds]);
+
 	useEffect(() => {
 		if (errorMessage) {
 			setProgress(null);
@@ -135,223 +144,315 @@ const Challenge = () => {
 	}, [errorMessage]);
 
 	return (
-		<div className="Challenge-container">
-			{progress == 100 ? null : (
-				<h3 className="Challenge-header">Create a Challange</h3>
-			)}
-			<Form
-				id="createChallengeForm"
-				onSubmit={onSubmit}
-				error={!!errorMessage}
-				success={!!statusMessage}
+		<div className="Challenge-main-container">
+			<h1 className="Challenge-header">RunDapp</h1>
+			<div className="Challenge-instructions-container">
+				<h3 className="Challenge-instructions-label">Instructions</h3>
+				<ol className="Challenge-ol-text">
+					<li className="Challenge-list-item">
+						Issue a running challenge to yourself or a friend.
+					</li>
+					<li className="Challenge-list-item">
+						The recipient must log the run using Strava. An email
+						will be sent to the recipient, which will prompt the
+						linking of a Strava account.
+					</li>
+					<li className="Challenge-list-item">
+						If the recipient logs a run that satisfies the
+						challenge, the recipient can claim run bounties{" "}
+						<a href="/claim">here</a>.
+					</li>
+				</ol>
+			</div>
+			<div
+				className={
+					windowWidth >= 625
+						? "Challenge-full-form-container"
+						: "Challenge-small-form-container"
+				}
 			>
 				{progress == 100 ? null : (
-					<>
-						<Form.Field>
-							<label className="Challenge-label">
-								Your name:
-							</label>
-							<input
-								className="Challenge-input"
-								id="challengerName"
-								type="text"
-								pattern="/[a-z]/i"
-								value={challengerName}
-								onChange={(event) =>
-									setChallengerName(event.target.value)
-								}
-							/>
-						</Form.Field>
-						<Form.Field required>
-							<label className="Challenge-label">
-								Your email:
-							</label>
-							<input
-								type="email"
-								className="Challenge-input"
-								id="challengerEmail"
-								// value={challengerEmail}
-								onChange={(event) =>
-									validateEmail(
-										event,
-										setChallengerEmail,
-										setChallengeeEmail,
-										setIsChallengerEmailValid,
-										setIsChallengeeEmailValid,
-										{
-											person: "challenger",
-										}
-									)
-								}
-							/>
-						</Form.Field>
-						<Form.Field>
-							<label className="Challenge-label">
-								Recipient name:
-							</label>
-							<input
-								className="Challenge-input"
-								id="challengeeName"
-								value={challengeeName}
-								onChange={(event) =>
-									setChallengeeName(event.target.value)
-								}
-							/>
-						</Form.Field>
+					<h3 className="Challenge-form-header">
+						Create a Challange
+					</h3>
+				)}
+				<Form
+					id="createChallengeForm"
+					onSubmit={onSubmit}
+					error={!!errorMessage}
+					success={!!statusMessage}
+				>
+					{progress == 100 ? null : (
+						<>
+							<Form.Field>
+								<label className="Challenge-label">
+									Your name:
+								</label>
+								<input
+									className="Challenge-input"
+									id="challengerName"
+									type="text"
+									placeholder="Ex:   Bob"
+									value={challengerName}
+									onChange={(event) =>
+										setChallengerName(event.target.value)
+									}
+								/>
+							</Form.Field>
+							<Form.Field required>
+								<label className="Challenge-label">
+									Your email:
+								</label>
+								<input
+									className="Challenge-input"
+									id="challengerEmail"
+									type="email"
+									placeholder="Ex:   bob@example.com"
+									onChange={(event) =>
+										validateEmail(
+											event,
+											setChallengerEmail,
+											setChallengeeEmail,
+											setIsChallengerEmailValid,
+											setIsChallengeeEmailValid,
+											{
+												person: "challenger",
+											}
+										)
+									}
+								/>
+							</Form.Field>
+							<Form.Field>
+								<label className="Challenge-label">
+									Recipient name:
+								</label>
+								<input
+									className="Challenge-input"
+									id="challengeeName"
+									type="text"
+									placeholder="Ex:   Alice"
+									value={challengeeName}
+									onChange={(event) =>
+										setChallengeeName(event.target.value)
+									}
+								/>
+							</Form.Field>
 
-						<Form.Field required>
-							<label className="Challenge-label">
-								Recipient email:
-							</label>
-							<input
-								type="email"
-								className="Challenge-input"
-								id="challengeeEmail"
-								// value={challengeeEmail}
-								onChange={(event) =>
-									validateEmail(
-										event,
-										setChallengerEmail,
-										setChallengeeEmail,
-										setIsChallengerEmailValid,
-										setIsChallengeeEmailValid,
-										{
-											person: "challengee",
+							<Form.Field required>
+								<label className="Challenge-label">
+									Recipient email:
+								</label>
+								<input
+									className="Challenge-input"
+									id="challengeeEmail"
+									type="email"
+									placeholder="Ex:   alice@example.com"
+									onChange={(event) =>
+										validateEmail(
+											event,
+											setChallengerEmail,
+											setChallengeeEmail,
+											setIsChallengerEmailValid,
+											setIsChallengeeEmailValid,
+											{
+												person: "challengee",
+											}
+										)
+									}
+								/>
+							</Form.Field>
+							<Form.Field required>
+								<label className="Challenge-label">
+									Recipient public address:
+								</label>
+								<input
+									className="Challenge-input"
+									id="challengeeAccount"
+									type="text"
+									placeholder="Ex:   0xDa0123456789C1bwd1234B4W41C123A45Fc31a78"
+									onChange={(event) =>
+										validateAccount(
+											event,
+											setChallengeeAccount,
+											setIsAccountValid
+										)
+									}
+								/>
+							</Form.Field>
+							<Form.Field required>
+								<label className="Challenge-label">
+									Run distance:
+								</label>
+								<div className="Challenge-input-container">
+									<input
+										style={{ width: "235px" }}
+										className="Challenge-input"
+										id="distance"
+										type="number"
+										step="any"
+										placeholder="Ex:   3.5"
+										onWheel={(e) => e.target.blur()}
+										onChange={(event) =>
+											validateDistance(
+												event,
+												setDistance,
+												setIsDistanceValid
+											)
 										}
-									)
-								}
+										autoComplete="off"
+									/>
+									<div className="Challenge-units-label">
+										<p className="Challenge-units-text ">
+											miles
+										</p>
+									</div>
+								</div>
+							</Form.Field>
+							<Form.Field required>
+								<label className="Challenge-label">
+									Average mile pace:
+								</label>
+								<div className="Challenge-input-container">
+									<select
+										className="Challenge-select"
+										id="paceMinutes"
+										value={paceMinutes}
+										onChange={(event) =>
+											setPaceMinutes(event.target.value)
+										}
+										required
+									>
+										<option value="" disabled>
+											MM
+										</option>
+										{minOptions.map((minute) => (
+											<option
+												value={minute.value}
+												key={minute.key}
+											>
+												{minute.text}
+											</option>
+										))}
+									</select>
+									<div>
+										<p className="Challenge-pace-colon">
+											:
+										</p>
+									</div>
+									<select
+										className="Challenge-select"
+										id="paceSeconds"
+										value={paceSeconds}
+										onChange={(event) =>
+											setPaceSeconds(event.target.value)
+										}
+										required
+									>
+										<option value="" disabled hidden>
+											SS
+										</option>
+										{secOptions.map((second) => (
+											<option
+												value={second.value}
+												key={second.key}
+											>
+												{second.text}
+											</option>
+										))}
+									</select>
+									<div className="Challenge-units-label">
+										<p className="Challenge-units-text ">
+											/ mile
+										</p>
+									</div>
+								</div>
+							</Form.Field>
+							<Form.Field required>
+								<label className="Challenge-label">
+									Bounty amount:
+								</label>
+								<div className="Challenge-input-container">
+									<input
+										style={{ width: "235px" }}
+										className="Challenge-input"
+										id="amount"
+										type="number"
+										step="any"
+										placeholder="Ex:   5"
+										onWheel={(e) => e.target.blur()}
+										onChange={(event) =>
+											validateAmount(
+												event,
+												setAmount,
+												setIsAmountValid
+											)
+										}
+										autoComplete="off"
+									/>
+									<div className="Challenge-units-label">
+										<p className="Challenge-units-text ">
+											MATIC
+										</p>
+									</div>
+								</div>
+							</Form.Field>
+						</>
+					)}
+					<Message
+						className={"Challenge-status-message"}
+						header={progress == 100 ? "Success" : null}
+						content={statusMessage}
+						success
+					/>
+					<Message
+						className={"Challenge-status-message"}
+						header="Error"
+						content={errorMessage}
+						error
+					/>
+					{progress ? (
+						progress < 100 ? (
+							<Progress
+								className="Challenge-status-bar"
+								percent={progress}
+								color="green"
+								inverted
+								progress
+								active={progress == 100 ? false : true}
 							/>
-						</Form.Field>
-						<Form.Field required>
-							<label className="Challenge-label">
-								Recipient public address:
-							</label>
-							<input
-								type="text"
-								className="Challenge-input"
-								id="challengeeAccount"
-								onChange={(event) =>
-									validateAccount(
-										event,
-										setChallengeeAccount,
-										setIsAccountValid
-									)
-								}
-							/>
-						</Form.Field>
-						<Form.Field required>
-							<label className="Challenge-label">
-								Run distance (miles):
-							</label>
-							<input
-								className="Challenge-input"
-								id="distance"
-								type="number"
-								onWheel={(e) => e.target.blur()}
-								onChange={(event) =>
-									validateDistance(
-										event,
-										setDistance,
-										setIsDistanceValid
-									)
-								}
-								autoComplete="off"
-							/>
-						</Form.Field>
-						<Form.Field required>
-							<label className="Challenge-label">
-								Average mile pace (mins/mile):
-							</label>
-							<input
-								className="Challenge-input"
-								id="speed"
-								type="number"
-								onWheel={(e) => e.target.blur()}
-								value={speed}
-								onChange={(event) =>
-									validateSpeed(
-										event,
-										setSpeed,
-										setIsSpeedValid
-									)
-								}
-								autoComplete="off"
-							/>
-						</Form.Field>
-						<Form.Field required>
-							<label className="Challenge-label">
-								Amount (MATIC):
-							</label>
-							<input
-								className="Challenge-input"
-								id="amount"
-								type="number"
-								onWheel={(e) => e.target.blur()}
-								onChange={(event) =>
-									validateAmount(
-										event,
-										setAmount,
-										setIsAmountValid
-									)
-								}
-								autoComplete="off"
-							/>
-						</Form.Field>
-					</>
-				)}
-				<Message
-					className={"Challenge-status-message"}
-					header={progress == 100 ? "Success" : null}
-					content={statusMessage}
-					success
-				/>
-				<Message
-					className={"Challenge-status-message"}
-					header="Error"
-					content={errorMessage}
-					error
-				/>
-				{progress ? (
-					progress < 100 ? (
-						<Progress
-							className="Challenge-status-bar"
-							percent={progress}
-							color="green"
-							inverted
-							progress
-							active={progress == 100 ? false : true}
-						/>
-					) : null
-				) : null}
-				{progress == 100 ? (
-					<Button
-						className="Challenge-button"
-						onClick={() => window.location.reload(true)}
-					>
-						Create Another Challenge
-					</Button>
-				) : (
-					<Button
-						className="Challenge-button"
-						loading={loading}
-						disabled={
-							!isChallengerEmailValid ||
-							!isAccountValid ||
-							!isChallengeeEmailValid ||
-							!isDistanceValid ||
-							!isSpeedValid ||
-							!isAmounttValid ||
-							loading ||
-							!account ||
-							chainId != 80001
-								? true
-								: false
-						}
-					>
-						Challenge
-					</Button>
-				)}
-			</Form>
+						) : null
+					) : null}
+					{progress == 100 ? (
+						<Button
+							className="Challenge-button"
+							onClick={() => window.location.reload(true)}
+						>
+							Create Another Challenge
+						</Button>
+					) : (
+						<Button
+							className="Challenge-button"
+							loading={loading}
+							disabled={
+								!isChallengerEmailValid ||
+								!isAccountValid ||
+								!isChallengeeEmailValid ||
+								!isDistanceValid ||
+								!paceSeconds ||
+								!isSpeedValid ||
+								!isAmounttValid ||
+								loading ||
+								!account ||
+								chainId != 80001
+									? true
+									: false
+							}
+						>
+							Challenge
+						</Button>
+					)}
+				</Form>
+			</div>
 		</div>
 	);
 };

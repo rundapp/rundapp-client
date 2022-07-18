@@ -6,11 +6,11 @@ import { Container } from "semantic-ui-react";
 // Local Imports
 import Header from "../components/Header";
 
-const Layout = (props) => {
+const Layout = ({ windowWidth, children }) => {
 	return (
 		<Container>
-			<Header />
-			{props.children}
+			<Header windowWidth={windowWidth} />
+			{children}
 		</Container>
 	);
 };

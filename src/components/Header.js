@@ -1,6 +1,6 @@
 // Installed Libraries
 import { useState, useEffect } from "react";
-import { Menu, Button, Icon, Popup } from "semantic-ui-react";
+import { Menu, Button, Icon, Popup, Dropdown } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { useSelector, useDispatch } from "react-redux";
@@ -34,12 +34,11 @@ const web3Modal = new Web3Modal({
 });
 
 // Header Function Component
-const Header = () => {
+const Header = ({ windowWidth }) => {
 	// State Management
 	const { providerInfo, account, chainId, errorMessage } = useSelector(
 		(state) => state.providerReducer
 	);
-	const [windowWidth, setWindowWidth] = useState(0);
 	const dispatch = useDispatch();
 	const [isLoading, setIsLoading] = useState(false);
 
@@ -91,22 +90,11 @@ const Header = () => {
 		dispatch(clearChainId());
 	};
 
-	// Update screen dimensions to change layout based on screen size
-	const updateDimensions = () => {
-		const width = window.innerWidth;
-		setWindowWidth(width);
-	};
-
+	// Connect to cached provider, to avoid clicking "Connect Wallet after refreshing the page
 	useEffect(() => {
-		// Connect to cached provider, to avoid clicking "Connect Wallet after refreshing the page
 		if (web3Modal.cachedProvider) {
 			connectWallet();
 		}
-
-		// Update screen dimensions
-		updateDimensions();
-		window.addEventListener("resize", updateDimensions);
-		return () => window.removeEventListener("resize", updateDimensions);
 	}, []);
 
 	// Listen to and handle changes in account or network data
@@ -160,7 +148,49 @@ const Header = () => {
 						Claim Bounty
 					</Link>
 				</>
-			) : null}
+			) : (
+				<Dropdown
+					style={{
+						display: "flex",
+						alignItems: "center",
+						backgroundColor: "transparent",
+						border: "solid 1px #3c414d",
+						borderRadius: "8px",
+						color: "white",
+					}}
+					className="icon"
+					icon="bars"
+					floating
+					button
+				>
+					<Dropdown.Menu
+						style={{
+							backgroundColor: "#3c414d",
+						}}
+					>
+						{account && chainId == 80001 ? (
+							<Dropdown.Header style={{ color: "white" }}>
+								{truncateAddress(account)}
+							</Dropdown.Header>
+						) : null}
+						<Dropdown.Item>
+							<Link to="/" className="Header-link">
+								Home
+							</Link>
+						</Dropdown.Item>
+						<Dropdown.Item>
+							<Link to="/challenge" className="Header-link">
+								Challenge
+							</Link>
+						</Dropdown.Item>
+						<Dropdown.Item>
+							<Link to="/claim" className="Header-link">
+								Claim Bounty
+							</Link>
+						</Dropdown.Item>
+					</Dropdown.Menu>
+				</Dropdown>
+			)}
 			<Menu.Menu position="right">
 				{!account ? (
 					<div className="Header-connection-div">
@@ -179,7 +209,7 @@ const Header = () => {
 					</div>
 				) : (
 					<div className="Header-connection-div">
-						{chainId != toHex(80001) ? (
+						{chainId != 80001 ? (
 							<Popup
 								content="At present, the only network we support is Polygon Mainnet (ID=137). Please switch to this network in your wallet."
 								trigger={
@@ -191,9 +221,11 @@ const Header = () => {
 								inverted
 							/>
 						) : null}
-						<p className="Header-account-hex">
-							{truncateAddress(account)}
-						</p>
+						{windowWidth >= 625 ? (
+							<p className="Header-account-hex">
+								{truncateAddress(account)}
+							</p>
+						) : null}
 						<Button
 							onClick={disconnect}
 							loading={isLoading}

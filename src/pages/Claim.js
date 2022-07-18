@@ -10,7 +10,7 @@ import ChallengeCard from "../components/ChallengeCard";
 import rundappAxios from "../api/RundappAxios";
 import { secsToDate } from "../utils/Utils";
 
-const Claim = () => {
+const Claim = ({ windowWidth }) => {
 	// State Management
 	const { providerInfo, account, chainId } = useSelector(
 		(state) => state.providerReducer
@@ -105,8 +105,8 @@ const Claim = () => {
 	}, [errorMessage]);
 
 	return (
-		<div>
-			<h3 style={header}>Claim Bounty</h3>
+		<div className="Claim-main-container">
+			<h1 className="Claim-header ">RunDapp</h1>
 			{account && chainId == 80001 ? (
 				verifiedBounties.length > 0 ? (
 					verifiedBounties.map((verifiedBounty) => (
@@ -123,7 +123,11 @@ const Claim = () => {
 								verifiedBounty.challenge.bounty,
 								"ether"
 							)} //Matic
-							issuedAt={verifiedBounty.challenge.created_at}
+							distance={verifiedBounty.challenge.distance}
+							speed={verifiedBounty.challenge.pace}
+							issuedAt={Date.parse(
+								verifiedBounty.challenge.created_at
+							)}
 							complete={verifiedBounty.challenge.complete}
 							secsToDate={secsToDate}
 							isClaimBounty={true}
@@ -136,39 +140,27 @@ const Claim = () => {
 								});
 							}}
 							loading={loading}
+							windowWidth={windowWidth}
 						/>
 					))
 				) : (
-					<div>
-						<span style={{ fontSize: "16px" }}>
-							You have no bounties to claim on completed
-							challenges. If you want to challenge yourself, you
-							can do so here (insert button).
-						</span>
-					</div>
+					<Message
+						className="Claim-warning-error-message"
+						header="No Completed Challenges"
+						content="You have no bounties to claim on completed challenges. If you want to challenge yourself, you can do so here (insert button)."
+						warning
+					/>
 				)
 			) : (
-				<div>
-					<span style={{ fontSize: "16px" }}>
-						Please make sure your wallet is connected and you are on
-						Polygon Mainnet (ID: 137)
-					</span>
-				</div>
+				<Message
+					className="Claim-warning-error-message"
+					header="Unable to Retrieve Completed Challenges"
+					content="Please make sure your wallet is connected and you are on Polygon Mainnet (ID: 137)."
+					negative
+				/>
 			)}
 		</div>
 	);
 };
 
 export default Claim;
-//
-//
-//
-//
-//
-//
-//********** Styles **********//
-const header = {
-	marginTop: 25,
-	marginBottom: 25,
-};
-//****************************//

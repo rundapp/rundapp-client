@@ -54,20 +54,20 @@ export const validateDistance = (event, setDistance, setIsDistanceValid) => {
 	}
 };
 
-export const validateSpeed = (event, setSpeed, setIsSpeedValid) => {
-	const speed = event.target.value;
-	if (speed >= 3.5 && speed <= 30) {
-		setSpeed(speed);
+export const validateSpeed = (convertedSpeed, setSpeed, setIsSpeedValid) => {
+	if (convertedSpeed >= 3.5 && convertedSpeed <= 30) {
+		setSpeed(convertedSpeed);
 		setIsSpeedValid(true);
 	} else {
-		setSpeed(speed);
+		setSpeed(convertedSpeed);
 		setIsSpeedValid(false);
 	}
 };
 
 export const validateAmount = (event, setAmount, setIsAmountValid) => {
 	const amount = event.target.value;
-	if (amount >= 4) {
+	// ********************************* NEED TO CHANGE TO CORRECT AMOUNT => 4 ********************************* //
+	if (amount >= 0.001) {
 		setAmount(amount);
 		setIsAmountValid(true);
 	} else {

@@ -1,10 +1,33 @@
-.Challenge-container {
+.Challenge-main-container {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+}
+
+.Challenge-full-form-container {
 	background-color: #3c414d;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	min-height: 725px;
-	width: 580px;
+	width: 550px;
+	padding: 10px;
+	margin-top: 15px;
+	margin-bottom: 35px;
+	border: 1px solid #3c414d;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.Challenge-small-form-container {
+	background-color: #3c414d;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-height: 725px;
+	width: 330px;
 	padding: 10px;
 	margin-top: 15px;
 	margin-bottom: 35px;
@@ -14,6 +37,39 @@
 }
 
 .Challenge-header {
+	padding-top: 5px;
+}
+
+.Challenge-instructions-container {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	max-height: 230px;
+	min-height: 185px;
+	min-width: 300px;
+}
+
+.Challenge-instructions-label {
+	align-self: flex-start;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.Challenge-ol-text {
+	align-self: flex-start;
+	padding: 10px;
+	width: 100%;
+	font-size: 15px;
+	margin-top: 0px;
+}
+
+.Challenge-list-item {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.Challenge-form-header {
 	align-self: center;
 	color: #b8b8b8;
 }
@@ -23,12 +79,63 @@
 }
 
 .Challenge-input {
+	font-size: 14px !important;
 	background-color: #282c34 !important;
 	color: #ffffff !important;
 }
 
 .Challenge-input:focus {
 	border: solid 1px #3ecfff8f !important;
+}
+
+.Challenge-input::placeholder {
+	color: #7b7878 !important;
+	opacity: 0.8;
+}
+
+.Challenge-select {
+	font-size: 14px !important;
+	background-color: #282c34 !important;
+	color: #ffffff !important;
+	height: 38px !important;
+	width: 90px !important;
+	outline-style: none;
+}
+
+.Challenge-select:required:invalid {
+	color: rgba(124, 121, 121, 0.8) !important;
+}
+
+.Challenge-input-container {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	background-color: #282c34;
+	border-radius: 5px;
+}
+
+.Challenge-pace-colon {
+	font-size: 20px !important;
+	margin-left: 10px;
+	margin-right: 5px;
+}
+
+.Challenge-units-text {
+	font-size: 14px !important;
+}
+
+.Challenge-units-label {
+	justify-self: flex-end;
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 38px;
+	width: 60px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-left: solid 1px #3c414d;
+	background-color: #282c34;
 }
 
 .Challenge-button {

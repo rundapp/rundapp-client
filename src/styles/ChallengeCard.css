@@ -1,13 +1,11 @@
-.ChallengeCard-container {
+.ChallengeCard-full-container {
 	background-color: #3c414d;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	/* max-height: 230px;
-	min-height: 185px;
-	max-width: 550px;
-	min-width: 470px; */
+	min-height: 235px;
+	width: 500px;
 	padding: 10px;
 	border: 1px solid #3c414d;
 	border-radius: 8px;
@@ -15,46 +13,72 @@
 	margin-bottom: 20px;
 }
 
-.ChallengeCard-regular-text {
+.ChallengeCard-small-container {
+	background-color: #3c414d;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 235px;
+	width: 330px;
+	padding: 10px;
+	border: 1px solid #3c414d;
+	border-radius: 8px;
+	margin-top: 5px;
+	margin-bottom: 20px;
+}
+
+.ChallengeCard-id-text {
+	font-size: 16px !important;
+	color: #ffffff;
+	align-self: flex-start;
+	margin-bottom: 0px;
+}
+
+.ChallengeCard-id-label {
+	color: #ffffff;
+	margin-right: 7px !important;
+}
+
+.ChallengeCard-date-text {
+	font-size: 14px;
 	color: #b8b8b8;
 	align-self: flex-start;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	padding-left: 22px;
-	padding-right: 22px;
-	width: 230px;
-	font-size: 14px;
+	margin-left: 3px;
+	margin-bottom: 8px;
 }
 
-.ChallengeCard-complete-text {
-	color: #16c174;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	padding-left: 22px;
-	padding-right: 22px;
-	width: 230px;
-	font-size: 14px;
-}
-
-.ChallengeCard-incomplete-text {
-	color: #b5533b;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	padding-left: 22px;
-	padding-right: 22px;
-	width: 230px;
-	font-size: 14px;
-}
-
-.ChallengeCard-bold-text {
-	color: #ffffff;
-	margin-right: 15px;
+.ChallengeCard-completion-flag {
+	align-self: flex-start;
+	font-size: 14px !important;
+	margin-top: 0px !important;
+	margin-bottom: 8px !important;
+	padding: 7px !important;
 }
 
 .ChallengeCard-hstack {
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 12px;
+	width: 100%;
+}
+
+.ChallengeCard-vstack {
+	display: grid;
+	align-items: center;
 	justify-content: center;
+}
+
+.ChallengeCard-labels {
+	font-size: 14px;
+	color: #b8b8b8;
+	margin-bottom: 0px;
+}
+
+.ChallengeCard-details {
+	font-size: 15px;
+	color: #ffffff;
 }
 
 .ChallengeCard-button {
