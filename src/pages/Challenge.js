@@ -1,6 +1,7 @@
 // Installed Libraries
 import React, { useEffect, useState } from "react";
 import { Form, Button, Message, Progress } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { useSelector } from "react-redux";
 
@@ -194,7 +195,10 @@ const Challenge = ({ windowWidth }) => {
 						<p className="Challenge-list-item">
 							If the recipient logs a run that satisfies the
 							challenge, the recipient can claim run bounties{" "}
-							<a href="/claim">here</a>.
+							<Link to="/claim" className="item">
+								here
+							</Link>
+							.
 						</p>
 					</div>
 				</div>
