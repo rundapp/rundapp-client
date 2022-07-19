@@ -41,20 +41,7 @@
 
 .ChallengeCard-date-text {
 	font-size: 14px;
-	margin-right: 8px;
 	color: #b8b8b8;
-}
-
-.ChallengeCard-completion-flag {
-	display: flex;
-	justify-content: center;
-	align-self: flex-start;
-	width: 83px;
-	font-size: 14px !important;
-	margin-top: 4px !important;
-	margin-bottom: 15px !important;
-	padding: 7px !important;
-	border-radius: 9px !important;
 }
 
 .ChallengeCard-hstack {
@@ -70,6 +57,8 @@
 	display: grid;
 	align-items: center;
 	justify-content: flex-start;
+	padding-left: 4.5px;
+	padding-right: 4.5px;
 }
 
 .ChallengeCard-labels {
@@ -81,6 +70,18 @@
 .ChallengeCard-details {
 	font-size: 15px;
 	color: #ffffff;
+	margin-bottom: 12px !important;
+}
+
+.ChallengeCard-complete-flag {
+	font-size: 15px;
+	color: #1ea043;
+	margin-bottom: 12px !important;
+}
+
+.ChallengeCard-pending-flag {
+	font-size: 15px;
+	color: #c2b1e3;
 	margin-bottom: 12px !important;
 }
 

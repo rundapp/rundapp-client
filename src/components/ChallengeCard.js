@@ -1,6 +1,6 @@
 // Installed Libraries
 import React from "react";
-import { Button, Message } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 
 // Local Imports
@@ -107,20 +107,15 @@ const ChallengeCard = ({
 						</p>
 					</div>
 					<div className="ChallengeCard-vstack">
+						<p className="ChallengeCard-labels">Status</p>
 						{complete ? (
-							<Message
-								className="ChallengeCard-completion-flag"
-								color="green"
-							>
+							<p className="ChallengeCard-complete-flag">
 								Complete
-							</Message>
+							</p>
 						) : (
-							<Message
-								className="ChallengeCard-completion-flag"
-								color="red"
-							>
-								Incomplete
-							</Message>
+							<p className="ChallengeCard-pending-flag">
+								Pending
+							</p>
 						)}
 					</div>
 				</div>

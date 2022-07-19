@@ -74,7 +74,7 @@ const Home = ({ windowWidth }) => {
 					</p>
 				</div>
 			</div>
-			<h2>Challenge Board</h2>
+			<h2 className="Home-board-header">Challenge Board</h2>
 			{challengesArray.map((challenge) => (
 				<ChallengeCard
 					key={challenge.challengeId}

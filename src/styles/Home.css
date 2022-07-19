@@ -24,6 +24,7 @@
 }
 
 .Home-top-buttons {
+	font-family: inherit !important;
 	width: 330px;
 	height: 40px;
 	margin-bottom: 5px !important;
@@ -49,10 +50,16 @@
 }
 
 .Home-header {
+	font-family: inherit !important;
 	padding-top: 5px;
 }
 
+.Home-board-header {
+	font-family: inherit !important;
+}
+
 .Home-regular-text {
+	font-family: inherit !important;
 	align-self: flex-start;
 	padding: 10px;
 	width: 100%;

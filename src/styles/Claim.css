@@ -16,6 +16,22 @@
 	overflow: auto;
 }
 
+.Claim-no-challenges-message {
+	background-color: #2e3440 !important;
+	color: #ffffff !important;
+	font-size: 16px !important;
+	width: 80% !important;
+	overflow: auto;
+}
+
+.Claim-not-connected-message {
+	background-color: #2e3440 !important;
+	color: #ffffff !important;
+	font-size: 16px !important;
+	width: 80% !important;
+	overflow: auto;
+}
+
 .Claim-challenge-button {
 	width: 330px;
 	height: 40px;

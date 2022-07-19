@@ -227,10 +227,9 @@ const Claim = ({ windowWidth }) => {
 				) : (
 					<>
 						<Message
-							className="Claim-status-message"
+							className="Claim-no-challenges-message"
 							header="No Completed Challenges"
-							content="You have no bounties to claim on completed challenges."
-							warning
+							content="You have no bounties to claim on completed challenges at this time."
 						/>
 						<Link to="/challenge" className="item">
 							<Button className="Claim-challenge-button">
@@ -241,10 +240,9 @@ const Claim = ({ windowWidth }) => {
 				)
 			) : (
 				<Message
-					className="Claim-status-message"
-					header="Unable to Retrieve Completed Challenges"
-					content="Please make sure your wallet is connected and that you are on Polygon Mainnet (ID: 137)."
-					negative
+					className="Claim-not-connected-message"
+					header="Connect your wallet to retrieve challenges 👆"
+					content="Make sure that your network is Polygon Mainnet (ID: 137)."
 				/>
 			)}
 		</div>
