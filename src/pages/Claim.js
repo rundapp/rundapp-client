@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Message, Progress } from "semantic-ui-react";
 import { ethers } from "ethers";
+import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 // Local Imports
@@ -17,7 +18,7 @@ const Claim = ({ windowWidth }) => {
 	);
 	const [verifiedBounties, setVerfiedBounties] = useState([]);
 	const [errorMessage, setErrorMessage] = useState("");
-	const [successMessage, setSuccessMessage] = useState("");
+	const [statusMessage, setStatusMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [progress, setProgress] = useState();
 	const runChallengerContract = providerInfo.runChallengerContract;
@@ -29,20 +30,27 @@ const Claim = ({ windowWidth }) => {
 				`/public/challenges/actions/claim?address=${account}`
 			);
 
-			if (response.status == 200)
+			if (response.status == 200) {
 				setVerfiedBounties(response.data.verified_bounties);
+			}
 		} catch (serverErr) {
-			console.log(serverErr);
+			if (serverErr.response.status != 404)
+				setErrorMessage(serverErr.message);
 		}
 	};
 
 	const onClaim = async ({ challengeId, hashedMessage, signature }) => {
 		setLoading(true);
 		setErrorMessage("");
-		setSuccessMessage("");
+		setStatusMessage("");
+
+		// Start progress bar
+		setProgress(10);
 
 		// Get latest nonce
 		const nonce = await library.getTransactionCount(account, "latest");
+
+		setProgress(30);
 
 		// Format arguments
 		const bytes32hashedMessage = ethers.utils.hexZeroPad(hashedMessage, 32);
@@ -59,29 +67,32 @@ const Claim = ({ windowWidth }) => {
 				}
 			);
 
+			setProgress(50);
+			setStatusMessage(
+				"Doing magic blockchain stuff. This may take a minute."
+			);
+
 			// Wait for transaction to successfully complete
 			const txReceipt = await txResponse.wait();
-			console.log("\ntxResponse: ", txResponse);
-			console.log("\ntxReceipt: ", txReceipt);
+			setProgress(80);
 
 			if (txReceipt.status == 1) {
 				try {
-					console.log("\nchallengeId: ", challengeId);
-					// send post request to server to update payment complete flag
+					// Send post request to server to update payment complete flag
 					const response = await rundappAxios.patch(
 						`/public/challenges/${challengeId}`
 					);
-					console.log("Response Data: ", response.data);
-					console.log("Response Status: ", response.status);
-					if (response.status == 204)
-						console.log("Successful bounty payment");
+					if (response.status == 204) setProgress(100);
+					setStatusMessage(
+						"You have successfully claimed the bounty of a challenge you completed."
+					);
 				} catch (serverErr) {
-					console.log(serverErr.message);
+					setProgress(null);
 					setErrorMessage(serverErr.message);
 				}
 			}
 		} catch (err) {
-			console.log(err.message);
+			setProgress(null);
 			setErrorMessage(err.message);
 		}
 		setLoading(false);
@@ -100,62 +111,139 @@ const Claim = ({ windowWidth }) => {
 	useEffect(() => {
 		if (errorMessage) {
 			setProgress(null);
-			// setStatusMessage("");
+			setStatusMessage("");
 		}
 	}, [errorMessage]);
 
 	return (
 		<div className="Claim-main-container">
 			<h1 className="Claim-header ">RunDapp</h1>
+			{statusMessage ? (
+				<Message className={"Claim-status-message"} success>
+					<Message.Header>
+						{progress == 100 ? "Success" : null}
+					</Message.Header>
+					<Message.Content>
+						{statusMessage.includes("You have successfully") ? (
+							<p>
+								{statusMessage} Check your wallet or {"  "}
+								<a
+									href={`https://mumbai.polygonscan.com/address/${account}#internaltx`} //************* Change to Polygon Mainnet link
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									PolygonScan
+								</a>
+								{"  "} to verify.
+							</p>
+						) : (
+							<p>{statusMessage}</p>
+						)}
+					</Message.Content>
+				</Message>
+			) : null}
+			{errorMessage ? (
+				<Message
+					className={"Claim-status-message"}
+					header="Error"
+					content={errorMessage}
+					error
+				/>
+			) : null}
+			{progress ? (
+				progress < 100 ? (
+					<Progress
+						className="Claim-status-bar"
+						percent={progress}
+						color="green"
+						inverted
+						progress
+						active={progress == 100 ? false : true}
+					/>
+				) : null
+			) : null}
+			{progress == 100 ? (
+				verifiedBounties.length > 1 ? (
+					<>
+						<Button
+							className="Claim-challenge-button"
+							onClick={() => window.location.reload(true)}
+						>
+							Claim Another Bounty
+						</Button>
+						<Link to="/challenge" className="item">
+							<Button className="Claim-challenge-button">
+								Create a Challenge
+							</Button>
+						</Link>
+					</>
+				) : (
+					<Link to="/challenge" className="item">
+						<Button className="Claim-challenge-button">
+							Create a Challenge
+						</Button>
+					</Link>
+				)
+			) : null}
 			{account && chainId == 80001 ? (
 				verifiedBounties.length > 0 ? (
-					verifiedBounties.map((verifiedBounty) => (
-						<ChallengeCard
-							key={verifiedBounty.challenge.id}
-							challengerAccount={
-								verifiedBounty.challenge.challenger_address
-							}
-							challengeeAccount={
-								verifiedBounty.challenge.challengee_address
-							}
-							challengeId={verifiedBounty.challenge.id}
-							bounty={ethers.utils.formatUnits(
-								verifiedBounty.challenge.bounty,
-								"ether"
-							)} //Matic
-							distance={verifiedBounty.challenge.distance}
-							speed={verifiedBounty.challenge.pace}
-							issuedAt={Date.parse(
-								verifiedBounty.challenge.created_at
-							)}
-							complete={verifiedBounty.challenge.complete}
-							secsToDate={secsToDate}
-							isClaimBounty={true}
-							onClaim={async () => {
-								onClaim({
-									challengeId: verifiedBounty.challenge.id,
-									hashedMessage:
-										verifiedBounty.hashed_message,
-									signature: verifiedBounty.signature,
-								});
-							}}
-							loading={loading}
-							windowWidth={windowWidth}
-						/>
-					))
+					progress == 100 ? null : (
+						verifiedBounties.map((verifiedBounty) => (
+							<ChallengeCard
+								key={verifiedBounty.challenge.id}
+								challengerAccount={
+									verifiedBounty.challenge.challenger_address
+								}
+								challengeeAccount={
+									verifiedBounty.challenge.challengee_address
+								}
+								challengeId={verifiedBounty.challenge.id}
+								bounty={ethers.utils.formatUnits(
+									verifiedBounty.challenge.bounty,
+									"ether"
+								)} //Matic
+								distance={verifiedBounty.challenge.distance}
+								speed={verifiedBounty.challenge.pace}
+								issuedAt={Date.parse(
+									verifiedBounty.challenge.created_at
+								)}
+								complete={verifiedBounty.challenge.complete}
+								secsToDate={secsToDate}
+								isClaimBounty={true}
+								onClaim={async () => {
+									onClaim({
+										challengeId:
+											verifiedBounty.challenge.id,
+										hashedMessage:
+											verifiedBounty.hashed_message,
+										signature: verifiedBounty.signature,
+									});
+								}}
+								loading={loading}
+								windowWidth={windowWidth}
+							/>
+						))
+					)
 				) : (
-					<Message
-						className="Claim-warning-error-message"
-						header="No Completed Challenges"
-						content="You have no bounties to claim on completed challenges. If you want to challenge yourself, you can do so here (insert button)."
-						warning
-					/>
+					<>
+						<Message
+							className="Claim-status-message"
+							header="No Completed Challenges"
+							content="You have no bounties to claim on completed challenges."
+							warning
+						/>
+						<Link to="/challenge" className="item">
+							<Button className="Claim-challenge-button">
+								Create a Challenge
+							</Button>
+						</Link>
+					</>
 				)
 			) : (
 				<Message
-					className="Claim-warning-error-message"
+					className="Claim-status-message"
 					header="Unable to Retrieve Completed Challenges"
-					content="Please make sure your wallet is connected and you are on Polygon Mainnet (ID: 137)."
+					content="Please make sure your wallet is connected and that you are on Polygon Mainnet (ID: 137)."
 					negative
 				/>
 			)}

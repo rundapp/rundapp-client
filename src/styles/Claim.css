@@ -4,13 +4,34 @@
 	flex: 1;
 	align-items: center;
 	justify-content: center;
-	/* background-color: #d49292; */
 }
 
 .Claim-header {
 	padding-top: 5px;
 }
 
-.Claim-warning-error-message {
+.Claim-status-message {
 	font-size: 16px !important;
+	width: 80% !important;
+	overflow: auto;
+}
+
+.Claim-challenge-button {
+	width: 330px;
+	height: 40px;
+	margin-bottom: 5px !important;
+	margin-top: 5px !important;
+	background-image: linear-gradient(
+		to right,
+		#00557ff4,
+		#4a158fda
+	) !important;
+	color: #ffffff !important;
+	border-radius: 20px !important;
+}
+
+.Claim-status-bar {
+	width: 80% !important;
+	margin-top: 0px !important;
+	margin-bottom: 8px !important;
 }

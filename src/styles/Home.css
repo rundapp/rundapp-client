@@ -30,12 +30,11 @@
 	margin-top: 5px !important;
 	background-image: linear-gradient(
 		to right,
-		#1b6882,
-		#15586e,
-		#1f5597,
-		#174379
+		#00557ff4,
+		#4a158fda
 	) !important;
 	color: #ffffff !important;
+	border-radius: 20px !important;
 }
 
 .Home-top-paragraph-container {

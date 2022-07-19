@@ -7,7 +7,7 @@
 }
 
 .Challenge-full-form-container {
-	background-color: #3c414d;
+	background-color: #2e3440;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -16,13 +16,13 @@
 	padding: 10px;
 	margin-top: 15px;
 	margin-bottom: 35px;
-	border: 1px solid #3c414d;
-	border-radius: 8px;
+	border: 1px solid #2e3440;
+	border-radius: 15px;
 	overflow: hidden;
 }
 
 .Challenge-small-form-container {
-	background-color: #3c414d;
+	background-color: #2e3440;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -31,8 +31,8 @@
 	padding: 10px;
 	margin-top: 15px;
 	margin-bottom: 35px;
-	border: 1px solid #3c414d;
-	border-radius: 8px;
+	border: 1px solid #2e3440;
+	border-radius: 15px;
 	overflow: hidden;
 }
 
@@ -45,8 +45,6 @@
 	align-items: center;
 	flex-direction: column;
 	justify-content: center;
-	max-height: 230px;
-	min-height: 185px;
 	min-width: 300px;
 }
 
@@ -65,8 +63,7 @@
 }
 
 .Challenge-list-item {
-	margin-top: 5px;
-	margin-bottom: 5px;
+	margin-top: 7px;
 }
 
 .Challenge-form-header {
@@ -80,8 +77,9 @@
 
 .Challenge-input {
 	font-size: 14px !important;
-	background-color: #282c34 !important;
+	background-color: #202125 !important;
 	color: #ffffff !important;
+	border-radius: 8px !important;
 }
 
 .Challenge-input:focus {
@@ -95,7 +93,7 @@
 
 .Challenge-select {
 	font-size: 14px !important;
-	background-color: #282c34 !important;
+	background-color: #202125 !important;
 	color: #ffffff !important;
 	height: 38px !important;
 	width: 90px !important;
@@ -110,8 +108,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
-	background-color: #282c34;
-	border-radius: 5px;
+	background-color: #202125;
+	border-radius: 8px !important;
 }
 
 .Challenge-pace-colon {
@@ -132,10 +130,10 @@
 	justify-content: center;
 	height: 38px;
 	width: 60px;
-	border-top-right-radius: 5px;
-	border-bottom-right-radius: 5px;
-	border-left: solid 1px #3c414d;
-	background-color: #282c34;
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+	border-left: solid 1px #2e3440;
+	background-color: #202125;
 }
 
 .Challenge-button {
@@ -143,12 +141,11 @@
 	margin-top: 5px !important;
 	background-image: linear-gradient(
 		to right,
-		#1b6882,
-		#15586e,
-		#1f5597,
-		#174379
+		#00557ff4,
+		#4a158fda
 	) !important;
 	color: #ffffff !important;
+	border-radius: 20px !important;
 }
 
 .Challenge-status-message {

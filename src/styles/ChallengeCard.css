@@ -1,29 +1,29 @@
 .ChallengeCard-full-container {
-	background-color: #3c414d;
+	background-color: #2e3440;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	min-height: 235px;
+	min-height: 200px;
 	width: 500px;
 	padding: 10px;
-	border: 1px solid #3c414d;
-	border-radius: 8px;
+	border: 1px solid #2e3440;
+	border-radius: 15px;
 	margin-top: 5px;
 	margin-bottom: 20px;
 }
 
 .ChallengeCard-small-container {
-	background-color: #3c414d;
+	background-color: #2e3440;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	min-height: 235px;
+	min-height: 200px;
 	width: 330px;
 	padding: 10px;
-	border: 1px solid #3c414d;
-	border-radius: 8px;
+	border: 1px solid #2e3440;
+	border-radius: 15px;
 	margin-top: 5px;
 	margin-bottom: 20px;
 }
@@ -31,7 +31,6 @@
 .ChallengeCard-id-text {
 	font-size: 16px !important;
 	color: #ffffff;
-	align-self: flex-start;
 	margin-bottom: 0px;
 }
 
@@ -42,24 +41,27 @@
 
 .ChallengeCard-date-text {
 	font-size: 14px;
+	margin-right: 8px;
 	color: #b8b8b8;
-	align-self: flex-start;
-	margin-left: 3px;
-	margin-bottom: 8px;
 }
 
 .ChallengeCard-completion-flag {
+	display: flex;
+	justify-content: center;
 	align-self: flex-start;
+	width: 83px;
 	font-size: 14px !important;
-	margin-top: 0px !important;
-	margin-bottom: 8px !important;
+	margin-top: 4px !important;
+	margin-bottom: 15px !important;
 	padding: 7px !important;
+	border-radius: 9px !important;
 }
 
 .ChallengeCard-hstack {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	margin-top: 10px;
 	margin-bottom: 12px;
 	width: 100%;
 }
@@ -67,7 +69,7 @@
 .ChallengeCard-vstack {
 	display: grid;
 	align-items: center;
-	justify-content: center;
+	justify-content: flex-start;
 }
 
 .ChallengeCard-labels {
@@ -79,16 +81,16 @@
 .ChallengeCard-details {
 	font-size: 15px;
 	color: #ffffff;
+	margin-bottom: 12px !important;
 }
 
 .ChallengeCard-button {
 	width: 100%;
 	background-image: linear-gradient(
 		to right,
-		#1b6882,
-		#15586e,
-		#1f5597,
-		#174379
+		#00557ff4,
+		#4a158fda
 	) !important;
 	color: #ffffff !important;
+	border-radius: 20px !important;
 }

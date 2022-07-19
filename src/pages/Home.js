@@ -56,15 +56,21 @@ const Home = ({ windowWidth }) => {
 				</div>
 				<div className="Home-top-paragraph-container">
 					<p className="Home-regular-text">
-						RunDapp is an open-source, Web3 running platform focused
-						on incentivizing people to run. How? With money.
-						RunDapp's incentive mechanism consists of a person
-						locking up a portion of money in a smart contract, such
-						that it only be retrieved upon completion of a run by
-						the intended recipient, which could be the person who
-						initiated the challenge or someone else. This is the
-						first version of this project, but we plan on making
-						various improvements soon. We'll keep you posted!
+						RunDapp is an{" "}
+						<a
+							href="https://github.com/rundapp"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							open-source
+						</a>
+						, Web3 platform focused on incentivizing people to run.
+						The platform provides both social and monetary rewards
+						to help you or your friends commit to running, which
+						results in a positive health impact. You can challenge
+						yourself or others to run by locking up money that's
+						only retrievable upon completing a run. For added
+						accountability, group challenges will be available soon!
 					</p>
 				</div>
 			</div>

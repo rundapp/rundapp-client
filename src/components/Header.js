@@ -154,7 +154,7 @@ const Header = ({ windowWidth }) => {
 						display: "flex",
 						alignItems: "center",
 						backgroundColor: "transparent",
-						border: "solid 1px #3c414d",
+						border: "solid 1px #2e3440",
 						borderRadius: "8px",
 						color: "white",
 					}}
@@ -165,7 +165,7 @@ const Header = ({ windowWidth }) => {
 				>
 					<Dropdown.Menu
 						style={{
-							backgroundColor: "#3c414d",
+							backgroundColor: "#2e3440",
 						}}
 					>
 						{account && chainId == 80001 ? (

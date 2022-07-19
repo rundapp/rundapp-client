@@ -72,7 +72,7 @@ const Challenge = ({ windowWidth }) => {
 			const txResponse = await runChallengerContract.issueChallenge(
 				challengeeAccount,
 				parseInt(distance * 160934.4), // Convert miles to cm
-				parseInt(speed * (160934.4 / 60)), // Convert min/mile to cm/sec
+				parseInt((1 / speed) * (160934.4 / 60)), // Convert min/mile to cm/sec
 				issuedAt,
 				challengeId,
 				{
@@ -116,17 +116,6 @@ const Challenge = ({ windowWidth }) => {
 			setProgress(null);
 			setErrorMessage(err.message);
 		}
-
-		// Refresh state
-		setChallengerName("");
-		setChallengerEmail("");
-		setChallengeeName("");
-		setChallengeeAccount("");
-		setChallengeeEmail("");
-		setAmount("");
-		setDistance("");
-		setSpeed("");
-		setErrorMessage("");
 		setLoading(false);
 	};
 
@@ -146,24 +135,73 @@ const Challenge = ({ windowWidth }) => {
 	return (
 		<div className="Challenge-main-container">
 			<h1 className="Challenge-header">RunDapp</h1>
+			{/*  */}
+			{/*  */}
+			{/*  */}
 			<div className="Challenge-instructions-container">
 				<h3 className="Challenge-instructions-label">Instructions</h3>
-				<ol className="Challenge-ol-text">
-					<li className="Challenge-list-item">
-						Issue a running challenge to yourself or a friend.
-					</li>
-					<li className="Challenge-list-item">
-						The recipient must log the run using Strava. An email
-						will be sent to the recipient, which will prompt the
-						linking of a Strava account.
-					</li>
-					<li className="Challenge-list-item">
-						If the recipient logs a run that satisfies the
-						challenge, the recipient can claim run bounties{" "}
-						<a href="/claim">here</a>.
-					</li>
-				</ol>
+				<div className="Challenge-ol-text">
+					<div
+						style={{
+							display: "flex",
+							alignItems: "flex-start",
+							justifyContent: "flex-start",
+							marginTop: "10px",
+						}}
+					>
+						<div style={{ marginRight: "15px" }}>
+							<p style={{ fontSize: "28px" }}>1️⃣</p>
+						</div>
+						<p className="Challenge-list-item">
+							Issue a running challenge to yourself or a friend.
+						</p>
+					</div>
+					<div
+						style={{
+							display: "flex",
+							alignItems: "flex-start",
+							justifyContent: "flex-start",
+							marginTop: "10px",
+						}}
+					>
+						<div style={{ marginRight: "15px" }}>
+							<p style={{ fontSize: "28px" }}>2️⃣</p>
+						</div>
+						<p className="Challenge-list-item">
+							The recipient must log the run using{" "}
+							<a
+								href="https://strava.com"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								Strava
+							</a>
+							. An email will be sent to the recipient, which will
+							prompt the linking of a Strava account.
+						</p>
+					</div>
+					<div
+						style={{
+							display: "flex",
+							alignItems: "flex-start",
+							justifyContent: "flex-start",
+							marginTop: "10px",
+						}}
+					>
+						<div style={{ marginRight: "15px" }}>
+							<p style={{ fontSize: "28px" }}>3️⃣</p>
+						</div>
+						<p className="Challenge-list-item">
+							If the recipient logs a run that satisfies the
+							challenge, the recipient can claim run bounties{" "}
+							<a href="/claim">here</a>.
+						</p>
+					</div>
+				</div>
 			</div>
+			{/*  */}
+			{/*  */}
+			{/*  */}
 			<div
 				className={
 					windowWidth >= 625
@@ -285,7 +323,7 @@ const Challenge = ({ windowWidth }) => {
 								</label>
 								<div className="Challenge-input-container">
 									<input
-										style={{ width: "235px" }}
+										style={{ width: "75%" }}
 										className="Challenge-input"
 										id="distance"
 										type="number"
@@ -323,7 +361,7 @@ const Challenge = ({ windowWidth }) => {
 										required
 									>
 										<option value="" disabled>
-											MM
+											Min
 										</option>
 										{minOptions.map((minute) => (
 											<option
@@ -348,8 +386,8 @@ const Challenge = ({ windowWidth }) => {
 										}
 										required
 									>
-										<option value="" disabled hidden>
-											SS
+										<option value="" disabled>
+											Sec
 										</option>
 										{secOptions.map((second) => (
 											<option
@@ -373,7 +411,7 @@ const Challenge = ({ windowWidth }) => {
 								</label>
 								<div className="Challenge-input-container">
 									<input
-										style={{ width: "235px" }}
+										style={{ width: "75%" }}
 										className="Challenge-input"
 										id="amount"
 										type="number"
