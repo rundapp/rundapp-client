@@ -126,12 +126,10 @@ export const switchToSupportedNetwork = async (
 			} catch (err) {
 				// setError(err);
 				dispatch(providerError(err));
-				console.log("\n", err);
 			}
 		} else {
 			// setError(switchError);
 			dispatch(providerError(switchError));
-			console.log(switchError);
 		}
 	}
 };

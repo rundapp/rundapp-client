@@ -40,6 +40,14 @@
 	padding-top: 5px;
 }
 
+.Challenge-not-connected-message {
+	background-color: #2e3440 !important;
+	color: #ffffff !important;
+	font-size: 16px !important;
+	width: 80% !important;
+	overflow: auto;
+}
+
 .Challenge-instructions-container {
 	display: flex;
 	align-items: center;
@@ -54,12 +62,27 @@
 	margin-bottom: 0px;
 }
 
-.Challenge-ol-text {
+.Challenge-ol-container {
 	align-self: flex-start;
 	padding: 10px;
 	width: 100%;
 	font-size: 15px;
 	margin-top: 0px;
+}
+
+.Challenge-list-hstack {
+	display: flex;
+	align-items: flex-start;
+	justify-content: flex-start;
+	margin-top: 10px;
+}
+
+.Challenge-list-emoji-container {
+	margin-right: 15px;
+}
+
+.Challenge-list-emoji-text {
+	font-size: 28px;
 }
 
 .Challenge-list-item {

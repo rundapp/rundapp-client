@@ -136,41 +136,32 @@ const Challenge = ({ windowWidth }) => {
 	return (
 		<div className="Challenge-main-container">
 			<h1 className="Challenge-header">RunDapp</h1>
-			{/*  */}
-			{/*  */}
-			{/*  */}
+			{!account || chainId != 80001 ? (
+				<Message
+					className="Challenge-not-connected-message"
+					header="Connect your wallet to create a challenge 👆"
+					content="Make sure that your network is Polygon Mainnet (ID: 137)."
+				/>
+			) : null}
 			<div className="Challenge-instructions-container">
 				<h3 className="Challenge-instructions-label">Instructions</h3>
-				<div className="Challenge-ol-text">
-					<div
-						style={{
-							display: "flex",
-							alignItems: "flex-start",
-							justifyContent: "flex-start",
-							marginTop: "10px",
-						}}
-					>
-						<div style={{ marginRight: "15px" }}>
-							<p style={{ fontSize: "28px" }}>1️⃣</p>
+				<div className="Challenge-ol-container">
+					<div className="Challenge-list-hstack">
+						<div className="Challenge-list-emoji-container">
+							<p className="Challenge-list-emoji-text">1️⃣</p>
 						</div>
 						<p className="Challenge-list-item">
 							Issue a running challenge to yourself or a friend.
 						</p>
 					</div>
-					<div
-						style={{
-							display: "flex",
-							alignItems: "flex-start",
-							justifyContent: "flex-start",
-							marginTop: "10px",
-						}}
-					>
-						<div style={{ marginRight: "15px" }}>
-							<p style={{ fontSize: "28px" }}>2️⃣</p>
+					<div className="Challenge-list-hstack">
+						<div className="Challenge-list-emoji-container">
+							<p className="Challenge-list-emoji-text">2️⃣</p>
 						</div>
 						<p className="Challenge-list-item">
 							The recipient must log the run using{" "}
 							<a
+								style={{ color: "#74bbed" }}
 								href="https://strava.com"
 								target="_blank"
 								rel="noopener noreferrer"
@@ -181,21 +172,18 @@ const Challenge = ({ windowWidth }) => {
 							prompt the linking of a Strava account.
 						</p>
 					</div>
-					<div
-						style={{
-							display: "flex",
-							alignItems: "flex-start",
-							justifyContent: "flex-start",
-							marginTop: "10px",
-						}}
-					>
-						<div style={{ marginRight: "15px" }}>
-							<p style={{ fontSize: "28px" }}>3️⃣</p>
+					<div className="Challenge-list-hstack">
+						<div className="Challenge-list-emoji-container">
+							<p className="Challenge-list-emoji-text">3️⃣</p>
 						</div>
 						<p className="Challenge-list-item">
 							If the recipient logs a run that satisfies the
 							challenge, the recipient can claim run bounties{" "}
-							<Link to="/claim" className="item">
+							<Link
+								style={{ color: "#74bbed" }}
+								to="/claim"
+								className="item"
+							>
 								here
 							</Link>
 							.
@@ -203,9 +191,6 @@ const Challenge = ({ windowWidth }) => {
 					</div>
 				</div>
 			</div>
-			{/*  */}
-			{/*  */}
-			{/*  */}
 			<div
 				className={
 					windowWidth >= 625
@@ -467,7 +452,24 @@ const Challenge = ({ windowWidth }) => {
 					{progress == 100 ? (
 						<Button
 							className="Challenge-button"
-							onClick={() => window.location.reload(true)}
+							onClick={() => {
+								// Refresh state
+								setChallengerName("");
+								setChallengerEmail("");
+								setChallengeeName("");
+								setChallengeeAccount("");
+								setChallengeeEmail("");
+								setAmount("");
+								setDistance("");
+								setSpeed("");
+								setProgress(null);
+								setStatusMessage("");
+								setErrorMessage("");
+								setLoading(false);
+
+								// Reload page
+								window.location.reload(true);
+							}}
 						>
 							Create Another Challenge
 						</Button>

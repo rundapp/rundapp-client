@@ -34,8 +34,14 @@ const Claim = ({ windowWidth }) => {
 				setVerfiedBounties(response.data.verified_bounties);
 			}
 		} catch (serverErr) {
-			if (serverErr.response.status != 404)
+			if (
+				(serverErr.response.status =
+					404 || serverErr.message.includes("Network Error"))
+			) {
+				// Do nothing
+			} else {
 				setErrorMessage(serverErr.message);
+			}
 		}
 	};
 
@@ -128,6 +134,7 @@ const Claim = ({ windowWidth }) => {
 							<p>
 								{statusMessage} Check your wallet or {"  "}
 								<a
+									style={{ color: "#74bbed" }}
 									href={`https://mumbai.polygonscan.com/address/${account}#internaltx`} //************* Change to Polygon Mainnet link
 									target="_blank"
 									rel="noopener noreferrer"

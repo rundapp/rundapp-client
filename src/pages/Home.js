@@ -58,6 +58,7 @@ const Home = ({ windowWidth }) => {
 					<p className="Home-regular-text">
 						RunDapp is an{" "}
 						<a
+							style={{ color: "#74bbed" }}
 							href="https://github.com/rundapp"
 							target="_blank"
 							rel="noopener noreferrer"
