@@ -178,22 +178,53 @@ const Header = ({ windowWidth }) => {
 							parseInt(
 								process.env.REACT_APP_POLYGON_MAINNET_CHAIN_ID
 							) ? (
-							<Dropdown.Header style={{ color: "white" }}>
+							<Dropdown.Header
+								style={{
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+									color: "white",
+								}}
+							>
 								{truncateAddress(account)}
 							</Dropdown.Header>
 						) : null}
 						<Dropdown.Item>
-							<Link to="/" className="Header-link">
+							<Link
+								style={{
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+								}}
+								to="/"
+								className="Header-link item"
+							>
 								Home
 							</Link>
 						</Dropdown.Item>
 						<Dropdown.Item>
-							<Link to="/challenge" className="Header-link">
+							<Link
+								style={{
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+								}}
+								to="/challenge"
+								className="Header-link item"
+							>
 								Challenge
 							</Link>
 						</Dropdown.Item>
 						<Dropdown.Item>
-							<Link to="/claim" className="Header-link">
+							<Link
+								style={{
+									display: "flex",
+									alignItems: "center",
+									justifyContent: "center",
+								}}
+								to="/claim"
+								className="Header-link item"
+							>
 								Claim Bounty
 							</Link>
 						</Dropdown.Item>
