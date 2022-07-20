@@ -14,7 +14,7 @@ export const providerOptions = {
 		package: WalletConnectProvider,
 		options: {
 			rpc: {
-				80001: process.env.REACT_APP_POLYGON_MUMBAI_NODE, // Moralis Polygon Mumbai Full Node
+				137: process.env.REACT_APP_POLYGON_MAINNET_NODE,
 			},
 		},
 		display: {
@@ -26,7 +26,7 @@ export const providerOptions = {
 		options: {
 			appName: "Rundapp",
 			rpc: {
-				80001: process.env.REACT_APP_POLYGON_MUMBAI_NODE, // Moralis Polygon Mumbai Full Node
+				137: process.env.REACT_APP_POLYGON_MAINNET_NODE,
 			},
 			darkMode: true,
 		},

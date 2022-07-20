@@ -30,9 +30,9 @@ export const networkOptions = [
 		),
 	},
 	{
-		key: "PolygonMumbaiChainId",
+		key: "PolygonMainnetChainId",
 		text: "Polygon",
-		value: 80001,
+		value: parseInt(process.env.REACT_APP_POLYGON_MAINNET_CHAIN_ID),
 		image: (
 			<img
 				alt="polygonLogo"

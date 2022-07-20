@@ -66,8 +66,7 @@ export const validateSpeed = (convertedSpeed, setSpeed, setIsSpeedValid) => {
 
 export const validateAmount = (event, setAmount, setIsAmountValid) => {
 	const amount = event.target.value;
-	// ********************************* NEED TO CHANGE TO CORRECT AMOUNT => 4 ********************************* //
-	if (amount >= 0.001) {
+	if (amount >= 3) {
 		setAmount(amount);
 		setIsAmountValid(true);
 	} else {
@@ -105,7 +104,13 @@ export const switchToSupportedNetwork = async (
 	try {
 		await tempLibrary.provider.request({
 			method: "wallet_switchEthereumChain",
-			params: [{ chainId: toHex(80001) }], // Polygon Mumbai Testnet (only supported network at present)
+			params: [
+				{
+					chainId: toHex(
+						parseInt(process.env.REACT_APP_POLYGON_MAINNET_CHAIN_ID)
+					),
+				},
+			],
 		});
 	} catch (switchError) {
 		// Code 4902 means the network has not been added to user's Metamask,
@@ -116,9 +121,16 @@ export const switchToSupportedNetwork = async (
 					method: "wallet_addEthereumChain",
 					params: [
 						{
-							chainId: toHex(80001), // Polygon Mumbai Testnet (only supported network at present)
+							chainId: toHex(
+								parseInt(
+									process.env
+										.REACT_APP_POLYGON_MAINNET_CHAIN_ID
+								)
+							),
 							chainName: "Polygon",
-							rpcUrls: ["https://rpc-mumbai.maticvigil.com"],
+							rpcUrls: [
+								process.env.REACT_APP_POLYGON_MAINNET_NODE,
+							],
 							blockExplorerUrls: ["https://polygonscan.com/"],
 						},
 					],

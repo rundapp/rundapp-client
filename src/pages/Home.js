@@ -18,12 +18,12 @@ const Home = ({ windowWidth }) => {
 	const getChallengesArray = async () => {
 		// Read-only provider
 		const provider = new ethers.providers.JsonRpcProvider(
-			process.env.REACT_APP_POLYGON_MUMBAI_NODE
+			process.env.REACT_APP_POLYGON_MAINNET_NODE
 		);
 
 		// Read-only contract instance
 		const runChallengerContract = new ethers.Contract(
-			process.env.REACT_APP_POLYGON_MUMBAI_CONTRACT_ADDRESS,
+			process.env.REACT_APP_POLYGON_MAINNET_CONTRACT_ADDRESS,
 			RunChallenger.abi,
 			provider
 		);

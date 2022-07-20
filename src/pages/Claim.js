@@ -135,7 +135,7 @@ const Claim = ({ windowWidth }) => {
 								{statusMessage} Check your wallet or {"  "}
 								<a
 									style={{ color: "#74bbed" }}
-									href={`https://mumbai.polygonscan.com/address/${account}#internaltx`} //************* Change to Polygon Mainnet link
+									href={`https://polygonscan.com/address/${account}#internaltx`}
 									target="_blank"
 									rel="noopener noreferrer"
 								>
@@ -192,7 +192,9 @@ const Claim = ({ windowWidth }) => {
 					</Link>
 				)
 			) : null}
-			{account && chainId == 80001 ? (
+			{account &&
+			chainId ==
+				parseInt(process.env.REACT_APP_POLYGON_MAINNET_CHAIN_ID) ? (
 				verifiedBounties.length > 0 ? (
 					progress == 100 ? null : (
 						verifiedBounties.map((verifiedBounty) => (

@@ -136,7 +136,9 @@ const Challenge = ({ windowWidth }) => {
 	return (
 		<div className="Challenge-main-container">
 			<h1 className="Challenge-header">RunDapp</h1>
-			{!account || chainId != 80001 ? (
+			{!account ||
+			chainId !=
+				parseInt(process.env.REACT_APP_POLYGON_MAINNET_CHAIN_ID) ? (
 				<Message
 					className="Challenge-not-connected-message"
 					header="Connect your wallet to create a challenge 👆"
@@ -487,7 +489,9 @@ const Challenge = ({ windowWidth }) => {
 								!isAmounttValid ||
 								loading ||
 								!account ||
-								chainId != 80001
+								chainId !=
+									process.env
+										.REACT_APP_POLYGON_MAINNET_CHAIN_ID
 									? true
 									: false
 							}

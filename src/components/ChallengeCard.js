@@ -127,7 +127,13 @@ const ChallengeCard = ({
 						onClick={onClaim}
 						loading={loading}
 						disabled={
-							loading || !account || chainId != 80001
+							loading ||
+							!account ||
+							chainId !=
+								parseInt(
+									process.env
+										.REACT_APP_POLYGON_MAINNET_CHAIN_ID
+								)
 								? true
 								: false
 						}

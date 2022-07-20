@@ -36,7 +36,7 @@ const web3Modal = new Web3Modal({
 // Header Function Component
 const Header = ({ windowWidth }) => {
 	// State Management
-	const { providerInfo, account, chainId, errorMessage } = useSelector(
+	const { providerInfo, account, chainId } = useSelector(
 		(state) => state.providerReducer
 	);
 	const dispatch = useDispatch();
@@ -53,7 +53,7 @@ const Header = ({ windowWidth }) => {
 			const signer = library.getSigner();
 
 			const runChallengerContract = new ethers.Contract(
-				process.env.REACT_APP_POLYGON_MUMBAI_CONTRACT_ADDRESS,
+				process.env.REACT_APP_POLYGON_MAINNET_CONTRACT_ADDRESS,
 				RunChallenger.abi,
 				signer
 			);
@@ -69,7 +69,12 @@ const Header = ({ windowWidth }) => {
 
 			if (accounts) {
 				dispatch(getAccount(accounts[0]));
-				if (network.chainId != toHex(80001)) {
+				if (
+					network.chainId !=
+					toHex(
+						parseInt(process.env.REACT_APP_POLYGON_MAINNET_CHAIN_ID)
+					)
+				) {
 					switchToSupportedNetwork(library, dispatch, providerError);
 					dispatch(getChainId(network.chainId));
 				} else {
@@ -83,7 +88,7 @@ const Header = ({ windowWidth }) => {
 		setIsLoading(false);
 	};
 
-	// We cannot disconnect the user, but we can mimic disconnecting by clearingthe state and cache
+	// We cannot disconnect the user, but we can mimic disconnecting by clearing the state and cache
 	const disconnect = () => {
 		web3Modal.clearCachedProvider();
 		dispatch(clearAccount());
@@ -168,7 +173,11 @@ const Header = ({ windowWidth }) => {
 							backgroundColor: "#2e3440",
 						}}
 					>
-						{account && chainId == 80001 ? (
+						{account &&
+						chainId ==
+							parseInt(
+								process.env.REACT_APP_POLYGON_MAINNET_CHAIN_ID
+							) ? (
 							<Dropdown.Header style={{ color: "white" }}>
 								{truncateAddress(account)}
 							</Dropdown.Header>
@@ -209,9 +218,12 @@ const Header = ({ windowWidth }) => {
 					</div>
 				) : (
 					<div className="Header-connection-div">
-						{chainId != 80001 ? (
+						{chainId !=
+						parseInt(
+							process.env.REACT_APP_POLYGON_MAINNET_CHAIN_ID
+						) ? (
 							<Popup
-								content="At present, the only network we support is Polygon Mainnet (ID=137). Please switch to this network in your wallet."
+								content="At present, the only supported network is Polygon Mainnet (ID=137). Please switch to this network in your wallet."
 								trigger={
 									<p className="Header-unsupported-network">
 										NETWORK NOT SUPPORTED
