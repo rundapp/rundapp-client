@@ -29,7 +29,6 @@ const Claim = ({ windowWidth }) => {
 			const response = await rundappAxios.get(
 				`/public/challenges/actions/claim?address=${account}`
 			);
-
 			if (response.status == 200) {
 				setVerfiedBounties(response.data.verified_bounties);
 			}
@@ -207,10 +206,7 @@ const Claim = ({ windowWidth }) => {
 									verifiedBounty.challenge.challengee_address
 								}
 								challengeId={verifiedBounty.challenge.id}
-								bounty={ethers.utils.formatUnits(
-									verifiedBounty.challenge.bounty,
-									"ether"
-								)} //Matic
+								bounty={verifiedBounty.challenge.bounty / 1e18} //Matic
 								distance={verifiedBounty.challenge.distance}
 								speed={verifiedBounty.challenge.pace}
 								issuedAt={Date.parse(
