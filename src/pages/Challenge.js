@@ -310,7 +310,7 @@ const Challenge = ({ windowWidth }) => {
 							</Form.Field>
 							<Form.Field required>
 								<label className="Challenge-label">
-									Run distance:
+									Run distance (0.25 or greater):
 								</label>
 								<div className="Challenge-input-container">
 									<input
@@ -339,7 +339,7 @@ const Challenge = ({ windowWidth }) => {
 							</Form.Field>
 							<Form.Field required>
 								<label className="Challenge-label">
-									Average mile pace:
+									Average mile pace (between 03:30 and 30:00):
 								</label>
 								<div className="Challenge-input-container">
 									<select
@@ -398,7 +398,7 @@ const Challenge = ({ windowWidth }) => {
 							</Form.Field>
 							<Form.Field required>
 								<label className="Challenge-label">
-									Bounty amount:
+									Bounty amount (3 or greater):
 								</label>
 								<div className="Challenge-input-container">
 									<input
