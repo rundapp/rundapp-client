@@ -1,5 +1,5 @@
 .Header-link {
-	color: white !important;
+	color: #ffffff !important;
 	font-weight: bold !important;
 }
 
@@ -24,7 +24,7 @@
 }
 
 .Header-unsupported-network {
-	color: red;
+	color: #ff0000;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -38,4 +38,35 @@
 	justify-content: center;
 	height: 100% !important;
 	margin-left: 5px !important;
+}
+
+.Header-hamburger-button {
+	display: flex !important;
+	align-items: center;
+	background-color: transparent !important;
+	border: solid 2px #ffffff !important;
+	border-radius: 5px !important;
+	color: #ffffff !important;
+}
+
+.Header-hamburger-button:hover {
+	background-color: #ffffff !important;
+	color: #202125 !important;
+}
+
+.Header-dropdown-menu {
+	background-color: #2e3440 !important;
+}
+
+.Header-dropdown-header {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ffffff !important;
+}
+
+.Header-dropdown-item {
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
 }

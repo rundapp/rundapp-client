@@ -155,79 +155,39 @@ const Header = ({ windowWidth }) => {
 				</>
 			) : (
 				<Dropdown
-					style={{
-						display: "flex",
-						alignItems: "center",
-						backgroundColor: "transparent",
-						border: "solid 1px #2e3440",
-						borderRadius: "8px",
-						color: "white",
-					}}
-					className="icon"
+					className="Header-hamburger-button icon"
 					icon="bars"
 					floating
 					button
 				>
-					<Dropdown.Menu
-						style={{
-							backgroundColor: "#2e3440",
-						}}
-					>
+					<Dropdown.Menu className="Header-dropdown-menu">
 						{account &&
 						chainId ==
 							parseInt(
 								process.env.REACT_APP_POLYGON_MAINNET_CHAIN_ID
 							) ? (
-							<Dropdown.Header
-								style={{
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-									color: "white",
-								}}
-							>
+							<Dropdown.Header className="Header-dropdown-header">
 								{truncateAddress(account)}
 							</Dropdown.Header>
 						) : null}
-						<Dropdown.Item>
-							<Link
-								style={{
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-								}}
-								to="/"
-								className="Header-link item"
-							>
+						<Link className="Header-dropdown-item item" to="/">
+							<Dropdown.Item className="Header-link">
 								Home
-							</Link>
-						</Dropdown.Item>
-						<Dropdown.Item>
-							<Link
-								style={{
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-								}}
-								to="/challenge"
-								className="Header-link item"
-							>
+							</Dropdown.Item>
+						</Link>
+						<Link
+							className="Header-dropdown-item item"
+							to="/challenge"
+						>
+							<Dropdown.Item className="Header-link">
 								Challenge
-							</Link>
-						</Dropdown.Item>
-						<Dropdown.Item>
-							<Link
-								style={{
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-								}}
-								to="/claim"
-								className="Header-link item"
-							>
+							</Dropdown.Item>
+						</Link>
+						<Link className="Header-dropdown-item item" to="/claim">
+							<Dropdown.Item className="Header-link">
 								Claim Bounty
-							</Link>
-						</Dropdown.Item>
+							</Dropdown.Item>
+						</Link>
 					</Dropdown.Menu>
 				</Dropdown>
 			)}
