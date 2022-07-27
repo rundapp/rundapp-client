@@ -1,6 +1,14 @@
 .Header-link {
-	color: #ffffff !important;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	padding: 20px !important;
+	color: #b8b8b8 !important;
 	font-weight: bold !important;
+}
+
+.Header-link:hover {
+	color: #ffffff !important;
 }
 
 .Header-menu {
@@ -65,8 +73,21 @@
 	color: #ffffff !important;
 }
 
+.Header-dropdown-link {
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+}
+
 .Header-dropdown-item {
 	display: flex !important;
 	align-items: center;
 	justify-content: center;
+	padding: 20px !important;
+	color: #b8b8b8 !important;
+	font-weight: bold !important;
+}
+
+.Header-dropdown-item:hover {
+	color: #ffffff !important;
 }

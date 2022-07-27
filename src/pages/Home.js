@@ -1,9 +1,8 @@
 // Installed Libraries
 import React, { useEffect, useState } from "react";
-import { Button } from "semantic-ui-react";
+import { Button, Accordion, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
-import { useSelector } from "react-redux";
 
 // Local Imports
 import "../styles/Home.css";
@@ -14,7 +13,9 @@ import RunChallenger from "../utils/RunChallenger.json";
 const Home = ({ windowWidth }) => {
 	// State Management
 	const [challengesArray, setChallengesArray] = useState([]);
+	const [activeFaqIndex, setActiveFaqIndex] = useState();
 
+	// Read Challenges from Smart Contract
 	const getChallengesArray = async () => {
 		// Read-only provider
 		const provider = new ethers.providers.JsonRpcProvider(
@@ -33,6 +34,49 @@ const Home = ({ windowWidth }) => {
 		const reversedChallenges = [...challenges].reverse();
 		setChallengesArray(reversedChallenges);
 	};
+
+	// Handle FAQ Dropdown
+	const handleFaqClick = (index) => {
+		const newIndex = activeFaqIndex == index ? -1 : index;
+		setActiveFaqIndex(newIndex);
+	};
+
+	// FAQ Rows
+	const faqPanels = [
+		{
+			key: "q1",
+			title: "Where does RunDapp store users' money?",
+			content: "RunDapp stores users' money in a smart contract account.",
+		},
+		{
+			key: "q2",
+			title: "Is RunDapp free to use?",
+			content:
+				"No. Currently, a 4% service fee and applicable transaction gas fees are deducted from every challenge bounty.",
+		},
+		{
+			key: "q3",
+			title: "What networks do you support",
+			content:
+				"Currently, we only support Polygon Mainnet, but we intend to expand to other networks soon.",
+		},
+		{
+			key: "q4",
+			title: "How do I record a run on Strava?",
+			content: "<LINK TO SUPPORT ARTICLE.>",
+		},
+		{
+			key: "q5",
+			title: "Can I record my run with a wearable device (Apple, Garmin, Fitbit, Samsung, etc.)?",
+			content:
+				"Yes. <LINK TO ARTICLE LISTING STRAVA-COMPATIBLE WEARABLES>",
+		},
+		{
+			key: "q6",
+			title: "How do I upload run to Strava from my wearable device?",
+			content: "<LINK TO SUPPORT ARTICLE.>",
+		},
+	];
 
 	useEffect(() => {
 		getChallengesArray();
@@ -55,7 +99,7 @@ const Home = ({ windowWidth }) => {
 					</Link>
 				</div>
 				<div className="Home-top-paragraph-container">
-					<p className="Home-regular-text">
+					<p className="Home-top-paragraph-text">
 						RunDapp is an{" "}
 						<a
 							style={{ color: "#74bbed" }}
@@ -74,23 +118,65 @@ const Home = ({ windowWidth }) => {
 						accountability, group challenges will be available soon!
 					</p>
 				</div>
+				<div className="Home-faq-container">
+					<Accordion
+						className="Home-faq-accordion"
+						fluid
+						styled
+						inverted
+					>
+						{faqPanels.map((panel, index) => (
+							<div className="Home-faq-panel" key={panel.key}>
+								<Accordion.Title
+									className={
+										activeFaqIndex == index
+											? "Home-faq-title-active"
+											: "Home-faq-title-inactive"
+									}
+									active={activeFaqIndex == index}
+									index={activeFaqIndex}
+									onClick={() => handleFaqClick(index)}
+								>
+									<div className="Home-faq-title-align">
+										<Icon name="dropdown" />
+										<p>{panel.title}</p>
+									</div>
+								</Accordion.Title>
+								<Accordion.Content
+									className="Home-faq-content"
+									active={activeFaqIndex == index}
+								>
+									<div className="Home-faq-title-align">
+										<div className="Home-faq-content-placeholder" />
+										<p>{panel.content}</p>
+									</div>
+								</Accordion.Content>
+							</div>
+						))}
+					</Accordion>
+				</div>
 			</div>
-			<h2 className="Home-board-header">Challenge Board</h2>
-			{challengesArray.map((challenge) => (
-				<ChallengeCard
-					key={challenge.challengeId}
-					challengerAccount={challenge.challenger}
-					challengeeAccount={challenge.challengee}
-					challengeId={challenge.challengeId}
-					bounty={ethers.utils.formatUnits(challenge.bounty, "ether")} // MATIC
-					distance={challenge.distance}
-					speed={challenge.speed}
-					issuedAt={challenge.issuedAt}
-					complete={challenge.complete}
-					secsToDate={secsToDate}
-					windowWidth={windowWidth}
-				/>
-			))}
+			<div className="Home-challenges-container">
+				<h2 className="Home-challenges-header">Challenge Board</h2>
+				{challengesArray.map((challenge) => (
+					<ChallengeCard
+						key={challenge.challengeId}
+						challengerAccount={challenge.challenger}
+						challengeeAccount={challenge.challengee}
+						challengeId={challenge.challengeId}
+						bounty={ethers.utils.formatUnits(
+							challenge.bounty,
+							"ether"
+						)} // MATIC
+						distance={challenge.distance}
+						speed={challenge.speed}
+						issuedAt={challenge.issuedAt}
+						complete={challenge.complete}
+						secsToDate={secsToDate}
+						windowWidth={windowWidth}
+					/>
+				))}
+			</div>
 		</div>
 	);
 };
