@@ -82,7 +82,13 @@ const Home = ({ windowWidth }) => {
 						accountability, group challenges will be available soon!
 					</p>
 				</div>
-				<div className="Home-faq-container">
+				<div
+					className={
+						windowWidth >= 625
+							? "Home-faq-container-full"
+							: "Home-faq-container-small"
+					}
+				>
 					<Accordion
 						className="Home-faq-accordion"
 						fluid

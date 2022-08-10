@@ -60,12 +60,21 @@
 	font-size: 15px;
 }
 
-.Home-faq-container {
+.Home-faq-container-full {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
 	justify-content: center;
-	min-width: 300px;
+	width: 80%;
+	margin-top: 20px;
+}
+
+.Home-faq-container-small {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	width: 330px;
 	margin-top: 20px;
 }
 
@@ -76,7 +85,21 @@
 	justify-content: center;
 	background-color: #2e3440 !important;
 	font-size: 15px !important;
+	border: 1px solid #2e3440;
+	border-radius: 15px !important;
 }
+
+.Home-faq-accordion-small {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	background-color: #2e3440 !important;
+	font-size: 15px !important;
+	border: 1px solid #2e3440;
+	border-radius: 15px !important;
+}
+
 .Home-faq-panel {
 	width: 100%;
 }
