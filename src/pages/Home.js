@@ -1,20 +1,22 @@
 // Installed Libraries
 import React, { useEffect, useState } from "react";
-import { Button } from "semantic-ui-react";
+import { Button, Accordion, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { ethers } from "ethers";
-import { useSelector } from "react-redux";
 
 // Local Imports
 import "../styles/Home.css";
 import ChallengeCard from "../components/ChallengeCard";
 import { secsToDate } from "../utils/Utils";
+import { faqPanels } from "../utils/FaqPanels";
 import RunChallenger from "../utils/RunChallenger.json";
 
 const Home = ({ windowWidth }) => {
 	// State Management
 	const [challengesArray, setChallengesArray] = useState([]);
+	const [activeFaqIndex, setActiveFaqIndex] = useState();
 
+	// Read Challenges from Smart Contract
 	const getChallengesArray = async () => {
 		// Read-only provider
 		const provider = new ethers.providers.JsonRpcProvider(
@@ -32,6 +34,12 @@ const Home = ({ windowWidth }) => {
 		const challenges = await runChallengerContract.getChallenges();
 		const reversedChallenges = [...challenges].reverse();
 		setChallengesArray(reversedChallenges);
+	};
+
+	// Handle FAQ Dropdown
+	const handleFaqClick = (index) => {
+		const newIndex = activeFaqIndex == index ? -1 : index;
+		setActiveFaqIndex(newIndex);
 	};
 
 	useEffect(() => {
@@ -55,7 +63,7 @@ const Home = ({ windowWidth }) => {
 					</Link>
 				</div>
 				<div className="Home-top-paragraph-container">
-					<p className="Home-regular-text">
+					<p className="Home-top-paragraph-text">
 						RunDapp is an{" "}
 						<a
 							style={{ color: "#74bbed" }}
@@ -74,23 +82,71 @@ const Home = ({ windowWidth }) => {
 						accountability, group challenges will be available soon!
 					</p>
 				</div>
+				<div
+					className={
+						windowWidth >= 625
+							? "Home-faq-container-full"
+							: "Home-faq-container-small"
+					}
+				>
+					<Accordion
+						className="Home-faq-accordion"
+						fluid
+						styled
+						inverted
+					>
+						{faqPanels.map((panel, index) => (
+							<div className="Home-faq-panel" key={panel.key}>
+								<Accordion.Title
+									className={
+										activeFaqIndex == index
+											? "Home-faq-title-active"
+											: "Home-faq-title-inactive"
+									}
+									active={activeFaqIndex == index}
+									index={activeFaqIndex}
+									onClick={() => handleFaqClick(index)}
+								>
+									<div className="Home-faq-title-align">
+										<Icon name="dropdown" />
+										<p>{panel.title}</p>
+									</div>
+								</Accordion.Title>
+								<Accordion.Content
+									className="Home-faq-content"
+									active={activeFaqIndex == index}
+								>
+									<div className="Home-faq-title-align">
+										<div className="Home-faq-content-placeholder" />
+										<p>{panel.content}</p>
+									</div>
+								</Accordion.Content>
+							</div>
+						))}
+					</Accordion>
+				</div>
 			</div>
-			<h2 className="Home-board-header">Challenge Board</h2>
-			{challengesArray.map((challenge) => (
-				<ChallengeCard
-					key={challenge.challengeId}
-					challengerAccount={challenge.challenger}
-					challengeeAccount={challenge.challengee}
-					challengeId={challenge.challengeId}
-					bounty={ethers.utils.formatUnits(challenge.bounty, "ether")} // MATIC
-					distance={challenge.distance}
-					speed={challenge.speed}
-					issuedAt={challenge.issuedAt}
-					complete={challenge.complete}
-					secsToDate={secsToDate}
-					windowWidth={windowWidth}
-				/>
-			))}
+			<div className="Home-challenges-container">
+				<h2 className="Home-challenges-header">Challenge Board</h2>
+				{challengesArray.map((challenge) => (
+					<ChallengeCard
+						key={challenge.challengeId}
+						challengerAccount={challenge.challenger}
+						challengeeAccount={challenge.challengee}
+						challengeId={challenge.challengeId}
+						bounty={ethers.utils.formatUnits(
+							challenge.bounty,
+							"ether"
+						)} // MATIC
+						distance={challenge.distance}
+						speed={challenge.speed}
+						issuedAt={challenge.issuedAt}
+						complete={challenge.complete}
+						secsToDate={secsToDate}
+						windowWidth={windowWidth}
+					/>
+				))}
+			</div>
 		</div>
 	);
 };

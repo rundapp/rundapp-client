@@ -145,11 +145,11 @@ const Header = ({ windowWidth }) => {
 			</Link>
 			{windowWidth >= 625 ? (
 				<>
-					<Link to="/challenge" className="Header-link item">
+					<Link to="/challenge" className="Header-link">
 						Challenge
 					</Link>
 
-					<Link to="/claim" className="Header-link item">
+					<Link to="/claim" className="Header-link">
 						Claim Bounty
 					</Link>
 				</>
@@ -170,21 +170,18 @@ const Header = ({ windowWidth }) => {
 								{truncateAddress(account)}
 							</Dropdown.Header>
 						) : null}
-						<Link className="Header-dropdown-item item" to="/">
-							<Dropdown.Item className="Header-link">
+						<Link className="Header-dropdown-link" to="/">
+							<Dropdown.Item className="Header-dropdown-item">
 								Home
 							</Dropdown.Item>
 						</Link>
-						<Link
-							className="Header-dropdown-item item"
-							to="/challenge"
-						>
-							<Dropdown.Item className="Header-link">
+						<Link className="Header-dropdown-link" to="/challenge">
+							<Dropdown.Item className="Header-dropdown-item">
 								Challenge
 							</Dropdown.Item>
 						</Link>
-						<Link className="Header-dropdown-item item" to="/claim">
-							<Dropdown.Item className="Header-link">
+						<Link className="Header-dropdown-link" to="/claim">
+							<Dropdown.Item className="Header-dropdown-item">
 								Claim Bounty
 							</Dropdown.Item>
 						</Link>

@@ -6,6 +6,11 @@
 	justify-content: center;
 }
 
+.Home-header {
+	font-family: inherit !important;
+	margin-top: 5px;
+}
+
 .Home-top-container {
 	display: flex;
 	flex-direction: column;
@@ -43,25 +48,96 @@
 	align-items: center;
 	flex-direction: column;
 	justify-content: center;
-	max-height: 230px;
-	min-height: 185px;
 	min-width: 300px;
 	margin-top: 20px;
 }
 
-.Home-header {
-	font-family: inherit !important;
-	padding-top: 5px;
-}
-
-.Home-board-header {
-	font-family: inherit !important;
-}
-
-.Home-regular-text {
+.Home-top-paragraph-text {
 	font-family: inherit !important;
 	align-self: flex-start;
 	padding: 10px;
 	width: 100%;
 	font-size: 15px;
+}
+
+.Home-faq-container-full {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	width: 80%;
+	margin-top: 20px;
+}
+
+.Home-faq-container-small {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	width: 330px;
+	margin-top: 20px;
+}
+
+.Home-faq-accordion {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	background-color: #2e3440 !important;
+	font-size: 15px !important;
+	border: 1px solid #2e3440;
+	border-radius: 15px !important;
+}
+
+.Home-faq-accordion-small {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: center;
+	background-color: #2e3440 !important;
+	font-size: 15px !important;
+	border: 1px solid #2e3440;
+	border-radius: 15px !important;
+}
+
+.Home-faq-panel {
+	width: 100%;
+}
+
+.Home-faq-title-align {
+	display: flex;
+}
+
+.Home-faq-content-placeholder {
+	width: 15px;
+	margin-right: 5px;
+}
+
+.Home-faq-title-active {
+	color: #ffffff !important;
+}
+
+.Home-faq-title-inactive {
+	color: #b8b8b8 !important;
+}
+
+.Home-faq-title-inactive:hover {
+	color: #ffffff !important;
+}
+
+.Home-faq-content {
+	color: #ffffff;
+}
+
+.Home-challenges-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+}
+
+.Home-challenges-header {
+	margin-top: 20px !important;
+	font-family: inherit !important;
 }
